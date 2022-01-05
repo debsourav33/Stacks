@@ -14,3 +14,12 @@
   .padded-container {
     padding: 2px 16px;
   }
+
+  .custom-btn{
+    width: 70px;
+    height: 30px;
+    background-color: rgb(255, 220, 24);
+    color: rgb(10, 10, 10);
+    align-self: center;
+    margin: 5px 0;
+  }

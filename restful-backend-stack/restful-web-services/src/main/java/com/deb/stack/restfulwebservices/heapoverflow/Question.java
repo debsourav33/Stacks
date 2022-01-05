@@ -1,5 +1,7 @@
 package com.deb.stack.restfulwebservices.heapoverflow;
 
+import java.util.Objects;
+
 public class Question {
 	int id;
 	String title;
@@ -34,5 +36,22 @@ public class Question {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Question other = (Question) obj;
+		return id == other.id;
 	}
 }

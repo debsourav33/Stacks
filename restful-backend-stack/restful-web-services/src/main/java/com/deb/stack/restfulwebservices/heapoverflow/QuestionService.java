@@ -19,4 +19,23 @@ public class QuestionService {
 	public List<Question> retrieveAllQuestions() {
 		return questions;
 	}	
+	
+	public Question deleteQuestion(long id) {
+		Question question = findById(id);
+		
+		if(question!=null) {
+			questions.remove(question);
+		}
+		
+		return question;
+		
+	}
+
+	private Question findById(long id) {
+		// TODO Auto-generated method stub
+		for(Question question: questions) {
+			if (question.id==id)  return question;
+		}
+		return null;
+	}
 }
