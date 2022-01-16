@@ -13,7 +13,7 @@ export default class QuestionComponent extends Component{
             <div className="card">
                 <h4>{this.props.question.title}</h4>
                 {this.props.question.description}
-                <button className="custom-btn" onClick={() => this.onQuestionDeleteCalled(this.props.question)}>Delete</button>
+                <button className="btn btn-warning btn-sized" onClick={() => this.onQuestionDeleteCalled(this.props.question)}>Delete</button>
             </div>
         )
     }

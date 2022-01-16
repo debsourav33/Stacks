@@ -1,0 +1,14 @@
+.title{
+    width: 90%;
+    padding: 5px;
+    margin: 5px;
+    font-weight: bold;
+}
+
+.description{
+    width: 90%;
+    height: 150px;
+    vertical-align: top;
+    padding: 5px;
+    margin: 5px;
+}

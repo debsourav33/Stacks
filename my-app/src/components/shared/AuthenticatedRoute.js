@@ -4,8 +4,8 @@ import AuthenticationService from "./AuthenticationService";
 
 function AuthenticatedRoute(childrenParam){
     let children = childrenParam['children'];
-    console.log("Children passed to Authenticated Route");
-    console.log(children);
+    //console.log("Children passed to Authenticated Route");
+    //console.log(children);
 
     return AuthenticationService.isLoggedIn() ? children : <Navigate to="/login" />;
     

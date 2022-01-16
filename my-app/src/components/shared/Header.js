@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {withRouter} from "react-router";
 import { Link} from "react-router-dom";
 import AuthenticationService from "./AuthenticationService";
 
@@ -13,13 +14,13 @@ class HeaderComponent extends Component{
                         {
                             loggedIn &&
                         <li>
-                            <Link className="nav-link" to="/welcome">Home</Link> 
+                            <Link className="nav-link" to="/questions">Home</Link> 
                         </li>
                         }
                         {
                             loggedIn &&
                         <li>
-                            <Link className="nav-link" to="/todo">Todo</Link> 
+                            <Link className="nav-link" to="/questions/post">Ask</Link> 
                         </li>
                         }
                     </ul>

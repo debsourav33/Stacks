@@ -4,13 +4,13 @@ import {
     Routes,
     Route
   } from "react-router-dom";
+import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import AuthenticationService from "./AuthenticationService";
 
 class LoginComponent extends Component{
     #userNameAttr = 'username'
     #passwordAttr = 'password'
     #userDict = {}
-
 
     constructor(props){
         super(props);
@@ -21,26 +21,32 @@ class LoginComponent extends Component{
         this.#userDict["deb33"] = "admin123";
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return false;
+    }
+
     onInputChange(event) {
         this.setState({
             [event.target.name] : event.target.value //[username] : asd , [password]: 123
         });
-        console.log(this.state);
     }
 
     attemptLogin(){
         //if(this.#userDict[this.state.username] = this.state.password){
 
-        if(this.state.username === "d" && this.state.password==="d"){
+        let promise = new HeapOverFlowService().authenticate(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
+        promise.then(response => {
             console.log("Login Succesful");
-            AuthenticationService.registerSuccesfulLogin(this.state.username, this.state.password);
+            console.log(response)
             
-            console.log(this.props.history);            
+            AuthenticationService.registerSuccesfulLogin(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
+            
+            //console.log(this.props.history);            
             //this.props.history.push('/welcome');
-        }
-        else{
+        }).catch(error => {
             console.log("Wrong UserName/Password");
-        }
+            console.log(error);
+        });
     }
 
     render(){

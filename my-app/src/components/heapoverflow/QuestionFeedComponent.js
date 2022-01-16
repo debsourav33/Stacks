@@ -3,7 +3,7 @@ import '../shared/login'
 import '../../common.css'
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import QuestionComponent from "./QuestionComponent";
-import "./Question.css"
+import "./QuestionFeed.css"
 
 class QuestionFeedComponent extends Component{
     constructor(props){
@@ -36,6 +36,9 @@ class QuestionFeedComponent extends Component{
             console.log("Mapped Question From Response");
             this.setState({questions: questionList});
             console.log(this.state);
+        })
+        .catch(error =>{
+            console.log(error)
         });
     }
 
@@ -44,7 +47,7 @@ class QuestionFeedComponent extends Component{
         for(let i=0;i<questions.length;i++){
             let question = questions[i];
             //ret.push(<li key={question.id} className="list-group-item"> <QuestionComponent question={question}>/></li>);
-            ret.push(<QuestionComponent question={question} questionUpdated={()=>{
+            ret.push(<QuestionComponent key={question.id} question={question} questionUpdated={()=>{
                 console.log("Re-rendering Question Feed");
                 this.retrieveMessageFromBackend();
             }}/>);

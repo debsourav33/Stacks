@@ -20,6 +20,18 @@ public class QuestionService {
 		return questions;
 	}	
 	
+	public Question save(Question question) {
+		if(question.getId()==-1 || question.getId()==0) {
+			question.setId(++id);
+		}
+		else {
+			deleteQuestion(question.getId());
+		}
+		
+		questions.add(question);
+		return question;
+	}
+	
 	public Question deleteQuestion(long id) {
 		Question question = findById(id);
 		
@@ -28,11 +40,9 @@ public class QuestionService {
 		}
 		
 		return question;
-		
 	}
 
 	private Question findById(long id) {
-		// TODO Auto-generated method stub
 		for(Question question: questions) {
 			if (question.id==id)  return question;
 		}

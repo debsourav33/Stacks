@@ -7,6 +7,10 @@ public class Question {
 	String title;
 	String description;
 	
+	public Question() {
+		
+	}
+	
 	public Question(int id, String title, String description) {
 		super();
 		this.id = id;
