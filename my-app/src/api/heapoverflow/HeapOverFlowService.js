@@ -3,61 +3,68 @@ import AuthenticationService from "../../components/shared/AuthenticationService
 
 export default class HeapOverFlowService{
     static baseUrl = "http://localhost:8080"
-    static questionUrl = HeapOverFlowService.baseUrl + "/questions"
+    static baseJpaUrl = HeapOverFlowService.baseUrl + "/jpa"
+    static questionJpaUrl = HeapOverFlowService.baseJpaUrl + "/questions"
     static authenticationUserName = "heaps";
     static authenticationPassword = "go123";
 
-    interceptorInitialized = false;
-
     constructor(){
-        if(AuthenticationService.isLoggedIn() && !this.interceptorInitialized){
-            this.setupAxiosInterceptor(AuthenticationService.getLoggedInUserName, HeapOverFlowService.authenticationPassword);
+        if(HeapOverFlowService._instance){
+            console.log("Returning cached instance");
+            return HeapOverFlowService._instance;
         }
+
+        console.log("Returning new instance");
+        
+        this.setupAxiosInterceptor();
+        HeapOverFlowService._instance = this;
     }
 
-    getBasicAuthenticationToken(username, password){
-        return "Basic " + window.btoa(username + ':' + password);
-    }
+    
 
     //For login, we don't setup axios interactor. So, manually send the auth header.
     authenticate(username, password){
-        let token = this.getBasicAuthenticationToken(username, password)
+        let token = AuthenticationService.getBasicAuthenticationToken(username, password)
         console.log("Trying to authenticate using username: " + username +", pass: " + password +", token: "+token);
-        return axios.get(HeapOverFlowService.baseUrl+"/basicauth",
-        {
-            headers : {authorization : token}
-        });
+        return [
+            axios.get(HeapOverFlowService.baseUrl+"/basicauth",
+            {
+                headers : {authorization : token}
+            }),
+            () => {
+                this.setupAxiosInterceptor();
+            }
+        ]
+        ;
     }
 
-    setupAxiosInterceptor(username, password){
-        let basicAuthHeader = this.getBasicAuthenticationToken(username, password);
+    setupAxiosInterceptor(){
+        if(!AuthenticationService.isLoggedIn())  return;
         axios.interceptors.request.use(
             (config) => {
-                if(AuthenticationService.isLoggedIn()){
-                    config.headers.authorization = basicAuthHeader;
-                    this.interceptorInitialized = true;
-                    console.log("Basic Auth Set: "+ basicAuthHeader);
-                }
-                
+                let basicAuthHeader = AuthenticationService.getRegisteredBasicAuthenticationToken();
+                config.headers.authorization = basicAuthHeader;
+                console.log("Basic Auth Set: "+ basicAuthHeader);
+            
                 return config;
             }, null, { synchronous: true }
         );
     }
 
     retrieveAllQuestions(){
-        return axios.get(HeapOverFlowService.questionUrl);
+        return axios.get(HeapOverFlowService.questionJpaUrl);
     }
 
     deleteQuestion(id){
         let user = AuthenticationService.getLoggedInUserName();
-        let url = HeapOverFlowService.baseUrl + "/" + user + "/questions/"+ id;
+        let url = HeapOverFlowService.baseJpaUrl + "/" + user + "/questions/"+ id;
         console.log(`Hitting: ${url}`);
         return axios.delete(url);
     }
 
     postQuestion(question){
         let user = AuthenticationService.getLoggedInUserName();
-        let url = HeapOverFlowService.baseUrl + "/" + user + "/questions";
+        let url = HeapOverFlowService.baseJpaUrl + "/" + user + "/questions";
         console.log(`Hitting: ${url}`);
         return axios.post(url,question);
     }

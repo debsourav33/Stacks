@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QuestionService {
-	static List<Question> questions = new ArrayList();
-	static int id = 0;
+	static List<Question> questions = new ArrayList<Question>();
+	static long id = 0;
 	static {
-		questions.add(new Question(++id, "Centering Div", "How to Center the Div"));
-		questions.add(new Question(++id, "LifeCycle", "Tell me the difference between onStart and onResume"));
-		questions.add(new Question(++id, "React Native vs Flutter", "Who wins between these 2 cross-platforms?"));
+		questions.add(new Question(++id, "Centering Div", "How to Center the Div","heaps"));
+		questions.add(new Question(++id, "LifeCycle", "Tell me the difference between onStart and onResume","heaps"));
+		questions.add(new Question(++id, "React Native vs Flutter", "Who wins between these 2 cross-platforms?","tales"));
 	}
 	
 	public List<Question> retrieveAllQuestions() {
@@ -44,7 +44,7 @@ public class QuestionService {
 
 	private Question findById(long id) {
 		for(Question question: questions) {
-			if (question.id==id)  return question;
+			if (question.getId()==id)  return question;
 		}
 		return null;
 	}

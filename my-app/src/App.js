@@ -29,13 +29,13 @@ class App extends Component {
           <Routes>
             <Route path="/" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
             <Route path="/todo" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
-            <Route path="/questions" element={<AuthenticatedRoute> <QuestionFeedComponent/> </AuthenticatedRoute>}/>
+            <Route path="/questions" element={<AuthenticatedRoute> <QuestionFeedComponent/> </AuthenticatedRoute> }/>
             <Route path="/questions/post" element={<AuthenticatedRoute> <QuestionPostComponent/> </AuthenticatedRoute>}/>
             <Route path="/login" element={<LoginComponent/>}/>
             <Route path="/logout" element={<AuthenticatedRoute> <LogoutComponent/> </AuthenticatedRoute>}/>
             <Route path="/welcome" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
           </Routes>
-          <FooterComponent/>
+          {/*<FooterComponent/>*/}
         </Router>
         
       </div>

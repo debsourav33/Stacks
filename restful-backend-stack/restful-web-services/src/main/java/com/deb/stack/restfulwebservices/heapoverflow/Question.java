@@ -2,27 +2,38 @@ package com.deb.stack.restfulwebservices.heapoverflow;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
-	int id;
-	String title;
-	String description;
+	
+	@Id
+	@GeneratedValue
+	private Long id; 
+	
+	private String title;
+	private String description;
+	private String userName;
 	
 	public Question() {
 		
 	}
 	
-	public Question(int id, String title, String description) {
+	public Question(Long id, String title, String description, String userName) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.userName = userName;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -40,6 +51,14 @@ public class Question {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	@Override

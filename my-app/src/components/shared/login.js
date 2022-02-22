@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route
-  } from "react-router-dom";
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import AuthenticationService from "./AuthenticationService";
+import {useNavigate} from "react-router-dom";
 
-class LoginComponent extends Component{
+class LoginComp extends Component{
     #userNameAttr = 'username'
     #passwordAttr = 'password'
     #userDict = {}
@@ -34,15 +30,18 @@ class LoginComponent extends Component{
     attemptLogin(){
         //if(this.#userDict[this.state.username] = this.state.password){
 
-        let promise = new HeapOverFlowService().authenticate(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
+        let result = new HeapOverFlowService().authenticate(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
+        let promise = result[0];
+        let callback = result[1];
         promise.then(response => {
             console.log("Login Succesful");
             console.log(response)
             
             AuthenticationService.registerSuccesfulLogin(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
+            callback()
             
             //console.log(this.props.history);            
-            //this.props.history.push('/welcome');
+            this.props.navigate("/questions");
         }).catch(error => {
             console.log("Wrong UserName/Password");
             console.log(error);
@@ -64,4 +63,10 @@ class LoginComponent extends Component{
     }    
 }
 
-export default LoginComponent;
+//export default LoginComponent;
+
+export default function LoginComponent(props) {
+    const navigation = useNavigate();
+  
+    return <LoginComp {...props} navigate={navigation} />;
+}
