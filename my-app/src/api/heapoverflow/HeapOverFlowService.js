@@ -3,8 +3,8 @@ import AuthenticationService from "../../components/shared/AuthenticationService
 
 export default class HeapOverFlowService{
     static baseUrl = "http://localhost:8080"
-    static baseJpaUrl = HeapOverFlowService.baseUrl + "/jpa"
-    static questionJpaUrl = HeapOverFlowService.baseJpaUrl + "/questions"
+    static baseJpaUrl = HeapOverFlowService.baseUrl //+ "/jpa"
+    static questionJpaUrl = HeapOverFlowService.baseUrl + "/questions"
     static authenticationUserName = "heaps";
     static authenticationPassword = "go123";
 
@@ -56,15 +56,13 @@ export default class HeapOverFlowService{
     }
 
     deleteQuestion(id){
-        let user = AuthenticationService.getLoggedInUserName();
-        let url = HeapOverFlowService.baseJpaUrl + "/" + user + "/questions/"+ id;
+        let url = HeapOverFlowService.baseJpaUrl + "/questions/"+ id;
         console.log(`Hitting: ${url}`);
         return axios.delete(url);
     }
 
     postQuestion(question){
-        let user = AuthenticationService.getLoggedInUserName();
-        let url = HeapOverFlowService.baseJpaUrl + "/" + user + "/questions";
+        let url = HeapOverFlowService.baseJpaUrl + "/questions";
         console.log(`Hitting: ${url}`);
         return axios.post(url,question);
     }

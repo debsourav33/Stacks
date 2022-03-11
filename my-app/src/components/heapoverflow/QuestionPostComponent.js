@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
+import AuthenticationService from "../shared/AuthenticationService";
+import Question from "./models/Question";
 import './QuestionPostComponent.css'
 
 class QuestionPostComponent extends Component{
@@ -24,14 +26,12 @@ class QuestionPostComponent extends Component{
     }
 
     postQuestion(){
+        const userName = AuthenticationService.getLoggedInUserName();
         console.log(this.state[this.#titleAttr]);
         console.log(this.state[this.#descriptionAttr]);
 
-        const newQuestion = {
-            title: this.state[this.#titleAttr],
-            description: this.state[this.#descriptionAttr]
-        };
-        
+        const newQuestion = new Question(undefined, this.state[this.#titleAttr], this.state[this.#descriptionAttr], userName);
+                
         new HeapOverFlowService().postQuestion(newQuestion)
         .then(resolve => {
             console.log("Succesfully posted question");
@@ -40,8 +40,6 @@ class QuestionPostComponent extends Component{
             console.log("Error in posting question");
             console.log(error);
         });
-
-        
     }
 
     render(){

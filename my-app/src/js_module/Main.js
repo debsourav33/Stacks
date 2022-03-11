@@ -110,6 +110,44 @@ export default class Main{
         console.log(car1.color);   // 'black'
         console.log(car2.color);   // 'original color'
     }
+
+    promises(){
+        const myPromiseToYou = new Promise((resolve,reject)=>{
+            const condition = false;
+            
+            if(condition){
+            resolve("condition met");
+            }
+            else{
+            reject("condition not met");
+            }
+        });
+        
+        //promise style
+        /*
+        myPromiseToYou
+        .then(msg =>{
+            console.log(msg);
+        })
+        .catch(msg =>{
+            console.log(`Error!!! ${msg}`);
+        });
+        */
+        
+        //async wait style
+        (async () => {
+            try{
+            const msg = await myPromiseToYou;
+            console.log(msg);
+            }
+            catch(e){
+            console.log(`Error!!! ${e}`);
+            }
+        })()
+        
+        console.log("Hello Cat!");  
+    }
+
     run(){
         //this.fun();
         //let ins = new this.fun();

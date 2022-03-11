@@ -4,52 +4,57 @@ import '../../common.css'
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import QuestionComponent from "./QuestionComponent";
 import "./QuestionFeed.css"
+import Question from "./models/Question";
 
 class QuestionFeedComponent extends Component{
     constructor(props){
         super(props);
         this.state = {questions:[]};
-        this.retrieveMessageFromBackend = this.retrieveMessageFromBackend.bind(this);
+        this.retrieveQuestionsFromBackend = this.retrieveQuestionsFromBackend.bind(this);
     }
 
     componentDidMount(){
-        this.retrieveMessageFromBackend();
+        this.retrieveQuestionsFromBackend();
     }
 
     render(){
         return(
             <div className="question-feed">
-                <button className="btn btn-success" onClick={this.retrieveMessageFromBackend}>Poke Backend</button>
+                <button className="btn btn-success" onClick={this.retrieveQuestionsFromBackend}>Poke Backend</button>
                 
                 {this.questionsToHtmlListItems(this.state.questions)}
             </div>
         );
     }
 
-    retrieveMessageFromBackend(){
-        let promise = new HeapOverFlowService().retrieveAllQuestions();
-        promise.then(response =>{
-            let questionList = response.data.map(question => {
-                //console.log(todo);
-                return {id: question.id, title: question.title, description: question.description};                
+    async retrieveQuestionsFromBackend(){        
+        //promise.then(response =>{
+
+        try{
+            //using await here will block the execution until the promise is resolved or rejected (catch error)
+            let response = await new HeapOverFlowService().retrieveAllQuestions();
+            console.log(response.data?.questions);
+            let questionList = response.data?.questions?.map(question => {
+                return new Question(question.id, question.title, question.description, question.userName);                
             });
             console.log("Mapped Question From Response");
             this.setState({questions: questionList});
             console.log(this.state);
-        })
-        .catch(error =>{
+        }
+        catch(error){
             console.log(error)
-        });
+        };
     }
 
     questionsToHtmlListItems(questions){
         let ret = [];
-        for(let i=0;i<questions.length;i++){
-            let question = questions[i];
+        for(let i=0;i<questions?.length;i++){
+            let question = questions?.[i];
+            if(!question) continue;
             //ret.push(<li key={question.id} className="list-group-item"> <QuestionComponent question={question}>/></li>);
             ret.push(<QuestionComponent key={question.id} question={question} questionUpdated={()=>{
                 console.log("Re-rendering Question Feed");
-                this.retrieveMessageFromBackend();
+                this.retrieveQuestionsFromBackend();
             }}/>);
         }
         return ret;
