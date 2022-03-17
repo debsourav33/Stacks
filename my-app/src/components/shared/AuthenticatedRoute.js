@@ -8,7 +8,6 @@ function AuthenticatedRoute(childrenParam){
     //console.log(children);
 
     return AuthenticationService.isLoggedIn() ? children : <Navigate to="/login" />;
-    
 }
 
 export default AuthenticatedRoute;

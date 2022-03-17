@@ -16,11 +16,9 @@ export default class HeapOverFlowService{
 
         console.log("Returning new instance");
         
-        this.setupAxiosInterceptor();
+        //this.setupAxiosInterceptor();
         HeapOverFlowService._instance = this;
     }
-
-    
 
     //For login, we don't setup axios interactor. So, manually send the auth header.
     authenticate(username, password){
@@ -29,6 +27,7 @@ export default class HeapOverFlowService{
         return [
             axios.get(HeapOverFlowService.baseUrl+"/basicauth",
             {
+                
                 headers : {authorization : token}
             }),
             () => {
@@ -38,7 +37,7 @@ export default class HeapOverFlowService{
         ;
     }
 
-    setupAxiosInterceptor(){
+    async setupAxiosInterceptor(){
         if(!AuthenticationService.isLoggedIn())  return;
         axios.interceptors.request.use(
             (config) => {

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import Todo from './components/todo/Todo';
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,6 +16,7 @@ import HeapOverFlowService from "./api/heapoverflow/HeapOverFlowService";
 import QuestionFeedComponent from "./components/heapoverflow/QuestionFeedComponent";
 import Main from "./js_module/Main";
 import QuestionPostComponent from "./components/heapoverflow/QuestionPostComponent";
+import CommentListClassComponent from "./components/heapoverflow/comment/CommentListComponent";
 
 class App extends Component {
   
@@ -27,13 +27,12 @@ class App extends Component {
         <Router>
           <HeaderComponent/>
           <Routes>
-            <Route path="/" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
-            <Route path="/todo" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
+            <Route path="/" element={<LoginComponent/>}/>
             <Route path="/questions" element={<AuthenticatedRoute> <QuestionFeedComponent/> </AuthenticatedRoute> }/>
+            <Route path="/questions/:qid" element={<AuthenticatedRoute> <CommentListClassComponent/> </AuthenticatedRoute> }/>
             <Route path="/questions/post" element={<AuthenticatedRoute> <QuestionPostComponent/> </AuthenticatedRoute>}/>
             <Route path="/login" element={<LoginComponent/>}/>
             <Route path="/logout" element={<AuthenticatedRoute> <LogoutComponent/> </AuthenticatedRoute>}/>
-            <Route path="/welcome" element={<AuthenticatedRoute> <Todo/> </AuthenticatedRoute>}/>
           </Routes>
           {/*<FooterComponent/>*/}
         </Router>

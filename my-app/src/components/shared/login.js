@@ -3,7 +3,7 @@ import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import AuthenticationService from "./AuthenticationService";
 import {useNavigate} from "react-router-dom";
 
-class LoginComp extends Component{
+class LoginClassComponnent extends Component{
     #userNameAttr = 'username'
     #passwordAttr = 'password'
     #userDict = {}
@@ -68,5 +68,5 @@ class LoginComp extends Component{
 export default function LoginComponent(props) {
     const navigation = useNavigate();
   
-    return <LoginComp {...props} navigate={navigation} />;
+    return <LoginClassComponnent {...props} navigate={navigation} />;
 }

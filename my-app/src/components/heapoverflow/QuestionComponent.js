@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { Component } from "react/cjs/react.production.min";
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
+import CommentListClassComponent from "./comment/CommentListComponent";
 import './Question.css'
 
-export default class QuestionComponent extends Component{
+class QuestionClassComponent extends Component{
     constructor(props){
         super(props);
-        this.onQuestionDeleteCalled = this.onQuestionDeleteCalled.bind(this);
+        this.onQuestionDeleteClicked = this.onQuestionDeleteClicked.bind(this);
+        this.onViewCommentsCalled = this.onViewCommentsCalled.bind(this);
     }
 
     render(){
@@ -13,12 +16,16 @@ export default class QuestionComponent extends Component{
             <div className="card">
                 <h4>{this.props.question.title}</h4>
                 {this.props.question.description}
-                <button className="btn btn-warning btn-sized" onClick={() => this.onQuestionDeleteCalled(this.props.question)}>Delete</button>
+                
+                <div style={{display: "inline"}}>
+                <button className="btn btn-warning btn-sized" style = {{marginRight: "5px"}} onClick={() => this.onQuestionDeleteClicked(this.props.question)}>Delete</button>
+                <button className="btn btn-success" onClick={() => this.onViewCommentsCalled(this.props.question)}>Comment</button>
+                </div>
             </div>
         )
     }
 
-    onQuestionDeleteCalled(question){
+    onQuestionDeleteClicked(question){
         console.log(`Deleting Question:`)
         console.log(question)
         let promise = new HeapOverFlowService().deleteQuestion(question.id)
@@ -26,4 +33,14 @@ export default class QuestionComponent extends Component{
             this.props.questionUpdated();                        
         });
     }
+
+    onViewCommentsCalled(question){
+        this.props.navigate(`${question.id}`,{question});
+    }
+
+}
+
+export default function QuestionComponent(props) {
+    const navigation = useNavigate();
+    return <QuestionClassComponent {...props} navigate = {navigation}/>;
 }

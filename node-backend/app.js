@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const HttpError = require('./models/HttpError');
-const questionsRoutes = require("./routes/questionsRoutes");
+const QuestionsRoutes = require("./routes/questionsRoutes");
+const AuthenticationRoutes = require("./routes/AuthenticationRoutes");
 
 let port = 8080;
 
@@ -19,8 +20,11 @@ app.use((req,res,next)=>{
     next();
 });
 
-app.use('/questions',questionsRoutes); //adding path param to use() is not mandatory
+app.use('/basicauth',AuthenticationRoutes);
+app.use('/questions',QuestionsRoutes); //adding path param to use() is not mandatory
 //if added -> the request will only be directed to questionRoutes if it STARTS with "question" (doesn't have to be an exact match)
+
+
 
 app.use((req,res,next)=>{ //default error route- will reach if no other route sends back response
     throw new HttpError('Error 404: Page Not Found',404);
