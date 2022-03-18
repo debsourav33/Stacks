@@ -1,8 +1,8 @@
 export default class Comment{
-    constructor(qid,cid,userName,text){
+    constructor(qid,cid,text,userName){
         this.qid = qid;
         this.cid = cid;
-        this.userName = userName;
         this.text = text;
+        this.userName = userName;
     }
 }

@@ -59,14 +59,22 @@ export default class HeapOverFlowService{
     }
 
     deleteQuestion(id){
-        let url = HeapOverFlowService.baseJpaUrl + "/questions/"+ id;
+        let url = HeapOverFlowService.questionJpaUrl + `/${id}`;
         console.log(`Hitting: ${url}`);
         return axios.delete(url);
     }
 
     postQuestion(question){
-        let url = HeapOverFlowService.baseJpaUrl + "/questions";
+        let url = HeapOverFlowService.questionJpaUrl;
         console.log(`Hitting: ${url}`);
         return axios.post(url,question);
     }
+
+    //comments
+    getCommentsByQuestionId(id){
+        let url = HeapOverFlowService.questionJpaUrl + `/${id}/comments`;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url);
+    }
+
 }

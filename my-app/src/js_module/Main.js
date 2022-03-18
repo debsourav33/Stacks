@@ -148,6 +148,30 @@ export default class Main{
         console.log("Hello Cat!");  
     }
 
+    anotherPromise(){
+        async function f(callback){
+            const prom = new Promise((resolve,reject)=>{
+            setTimeout(() => 
+            {
+              callback();
+              resolve();
+            }, 100)
+            });
+            
+            return prom;
+          }
+          
+          async function g(){
+            await f(()=>{
+              console.log("FF!");  
+            });
+            console.log("GG!");
+          }
+          
+          g();
+          console.log("HH!");
+    }
+
     run(){
         //this.fun();
         //let ins = new this.fun();
