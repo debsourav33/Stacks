@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const HttpError = require('./models/HttpError');
-const QuestionsRoutes = require("./routes/questionsRoutes");
+const QuestionsRoutes = require("./routes/QuestionsRoutes");
 const AuthenticationRoutes = require("./routes/AuthenticationRoutes");
 
 let port = 8080;

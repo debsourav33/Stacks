@@ -54,6 +54,10 @@ export default class HeapOverFlowService{
         return axios.get(HeapOverFlowService.questionJpaUrl);
     }
 
+    getQuestion(id){
+        return axios.get(HeapOverFlowService.questionJpaUrl + `/${id}`)
+    }
+
     deleteQuestion(id){
         let url = HeapOverFlowService.baseJpaUrl + "/questions/"+ id;
         console.log(`Hitting: ${url}`);

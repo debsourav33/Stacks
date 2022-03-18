@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom";
 import { Component } from "react/cjs/react.production.min";
+import HeapOverFlowService from "../../../api/heapoverflow/HeapOverFlowService";
+import Question from "../models/Question";
+import QuestionBodyComponent from "../QuestionBodyComponent";
 import CommentComponent from "./CommentComponent";
 
 class CommentListClassComponent extends Component{
@@ -18,24 +21,41 @@ class CommentListClassComponent extends Component{
                 text: "Restart your router"
 
             }
-
-        ]}
+        ],
+            question : {
+                title: "Hash or Trie",
+                description: "The question is real"
+            }
+        }
     }
 
     componentDidMount(){
         console.log(`Comments page for: ${this.props.params.qid}`);
+        this.retrieveQuestionFromBackend(this.props.params.qid);
         this.retrieveCommentsFromBackend(this.props.params.qid);
     }
 
-    retrieveCommentsFromBackend(){
+    async retrieveQuestionFromBackend(qid){
+        const webService = new HeapOverFlowService();
+        const response = await webService.getQuestion(qid);
+
+        //if(!response?.data?.question)  return;
+        const {id,title,description,userName} = response.data?.question;
+        this.setState({question: new Question(id,title,description,userName)});
+    }
+
+    retrieveCommentsFromBackend(qid){
 
     }
     
     render(){
         return (
-            <div>
+            <>
+                <div className="card">
+                <QuestionBodyComponent question = {this.state.question}/>
+                </div>
                 {this.commentsToHtmlListItems(this.state.comments)};
-            </div>
+            </>
         );
     }
 
