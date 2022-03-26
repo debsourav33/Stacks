@@ -2,6 +2,7 @@ const express = require('express');
 
 const CommentsRoutes = require('./CommentsRoutes');
 const QuestionController = require('../controllers/QuestionsController');
+const VoteRoutes = require('./VoteRoutes');
 const router = express.Router();
 
 const controller = new QuestionController();
@@ -17,6 +18,9 @@ router.delete('/:qid', controller.deleteQuestion);
 //comments
 router.use('/:qid/comments', CommentsRoutes);
 
+
+//votes
+router.use("/:qid/votes", VoteRoutes);
 
 module.exports = router;
 

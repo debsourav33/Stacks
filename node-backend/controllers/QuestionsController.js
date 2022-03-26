@@ -1,29 +1,31 @@
 const HttpError = require('../models/HttpError');
 const Question = require('../models/Question');
-class QuestionController{
-    constructor(){
-        this.dummyQuestions = [
-            new Question(1, "Do it?","Should I do it?", "deb33")
-            ,
-            new Question(2, "Hash or Trie?", "The question is real", "no-one")
-        ];
+const QuestionRepository = require('../repository/QuestionRepository');
+const StackOverFlowService = require('../routes/StackExchange');
 
+class QuestionController{
+    questionRepository = new QuestionRepository();
+
+    constructor(){
         this.getAllQuestions = this.getAllQuestions.bind(this);
         this.getQuestionByQuestionId = this.getQuestionByQuestionId.bind(this);
         this.saveQuestion = this.saveQuestion.bind(this);
         this.deleteQuestion = this.deleteQuestion.bind(this);
     }
 
-    getAllQuestions(req,res,next){
-        res.json({questions: this.dummyQuestions});
+    async getAllQuestions(req,res,next){
+        const questions = await this.questionRepository.getAllQuestions();
+        if(!questions){
+            return next(new HttpError("Can't retrieve questions!"));
+        }
+
+        return res.json({questions});
     }
 
     getQuestionByQuestionId(req,res,next){
         const qid = parseInt(req.params.qid); // {qid: '1'}
         console.log('Get request for question: ');
-        const question = this.dummyQuestions.find( q => {
-            return q.id === qid;
-        });
+        const question = this.questionRepository.getDummyQuestionById(qid);
     
         if(!question){
             return next(new HttpError("Can't find question with the requested id!"));
@@ -40,17 +42,15 @@ class QuestionController{
         const createdQuestion = new Question(3, title, description, userName);
         console.log(createdQuestion);
 
-        this.dummyQuestions.push(createdQuestion);
+        this.questionRepository.saveQuestion(createdQuestion);
         res.status(201).json({question: createdQuestion});
     }
 
     deleteQuestion(req,res,next){
         const qid = parseInt(req.params.qid);
-        this.dummyQuestions = this.dummyQuestions.filter(q => q.id !== qid);
+        this.questionRepository.deleteQuestion(qid);
         res.status(200).json({message: `Question Deleted with id: ${qid}`});
     }
 }
-
-
 
 module.exports = QuestionController;

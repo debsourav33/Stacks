@@ -6,7 +6,8 @@ const HttpError = require('../models/HttpError');
 class CommentsController{
     comments = [
         new Comment("1",uuidv4(),"You have to restart the router manully", "mrFixYourIT"),
-        new Comment("1",uuidv4(),"Cat walk please...", "unknownx33"),
+        new Comment("2",uuidv4(),"Really go to stackoverflow", "doxx"),
+        new Comment("1",uuidv4(),"Cat walk please...", "unknownx33")
     ];
     
     addComment = (req,res,next) => {
@@ -27,6 +28,7 @@ class CommentsController{
 
     getComments = (req,res,next) => {        
         const qid = req.params.qid;
+        console.log(this.comments);
         console.log(`Request for comments with questionId: ${qid}`);
         const filteredComments = this.#getCommentsByQuestionId(qid);
         console.log(this.comments);
