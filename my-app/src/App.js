@@ -7,6 +7,7 @@ import {
   Route
 } from "react-router-dom";
 import LoginComponent from "./components/shared/login";
+import DynamicLoginPage from "./components/shared/DynamicLoginPage";
 import HeaderComponent from "./components/shared/Header";
 import LogoutComponent from "./components/shared/logout";
 import FooterComponent from "./components/shared/Footer";

@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import AuthenticationService from "./AuthenticationService";
 import {useNavigate} from "react-router-dom";
+import DynamicLoginPage from "./DynamicLoginPage"
+import "./login.css"
+import VoteComponent from "../heapoverflow/vote/VoteComponent";
 
 class LoginClassComponnent extends Component{
     #userNameAttr = 'username'
@@ -20,6 +23,20 @@ class LoginClassComponnent extends Component{
     shouldComponentUpdate(nextProps, nextState){
         return false;
     }
+
+    render(){
+        return(
+            <div className="login">
+                <div> Please Login With a Valid Credential </div>
+                <div>
+                UserName <input type="text" name ={this.#userNameAttr} onChange={this.onInputChange}/>
+                Password <input type="password" name ={this.#passwordAttr} onChange={this.onInputChange}/>
+                <button type="submit" className="btn btn-success" style={{margin: '10px'}} onClick={this.attemptLogin}>Login</button>
+                </div>
+                
+            </div>
+        )
+    }    
 
     onInputChange(event) {
         this.setState({
@@ -47,20 +64,6 @@ class LoginClassComponnent extends Component{
             console.log(error);
         });
     }
-
-    render(){
-        return(
-            <div className="login">
-                <div> Please Login With a Valid Credential </div>
-                <div>
-                UserName <input type="text" name ={this.#userNameAttr} onChange={this.onInputChange}/>
-                Password <input type="password" name ={this.#passwordAttr} onChange={this.onInputChange}/>
-                <button type="submit" className="btn btn-success" style={{margin: '10px'}} onClick={this.attemptLogin}>Login</button>
-                </div>
-                
-            </div>
-        )
-    }    
 }
 
 //export default LoginComponent;

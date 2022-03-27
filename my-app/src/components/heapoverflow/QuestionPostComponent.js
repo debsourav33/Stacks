@@ -54,8 +54,6 @@ class QuestionPostComponent extends Component{
                 <div>
                 <button type="submit" className="btn btn-warning" style={{margin: '10px'}} onClick={this.postQuestion}>Post</button>
                 </div>
-                
-                
             </div>
         )
     }    

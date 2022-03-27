@@ -5,17 +5,37 @@ import Comment from "../models/Comment";
 import Question from "../models/Question";
 import QuestionBodyComponent from "../QuestionBodyComponent";
 import CommentComponent from "./CommentComponent";
+import CommentPostComponent from "./CommentPostComponent"
 
 class CommentListClassComponent extends Component{
     constructor(props){
         super(props);
-        this.state = {comments: []};
+        this.state = {question:undefined, comments: []};
+        this.onCommentPostedCallback = this.onCommentPostedCallback.bind(this);
     }
 
     async componentDidMount(){
         console.log(`Comments page for: ${this.props.params.qid}`);
         this.retrieveQuestionFromBackend(this.props.params.qid);
         this.retrieveCommentsFromBackend(this.props.params.qid);
+    }
+
+    render(){
+        return (
+            <>
+                <div className="card_orig">
+                <QuestionBodyComponent question = {this.state.question}/>
+                </div>
+                <CommentPostComponent questionId = {this.state.question?.id} onCommentPostedCallback = { () => {this.onCommentPostedCallback(this.state.question?.id)}}/>;
+                
+                {this.commentsToHtmlListItems(this.state.comments)};
+            </>
+        );
+    }
+
+    async onCommentPostedCallback(qid){
+        console.log("Comment Posted Callback Triggered");
+        this.retrieveCommentsFromBackend(qid);
     }
 
     async retrieveQuestionFromBackend(qid){
@@ -40,28 +60,17 @@ class CommentListClassComponent extends Component{
             return new Comment(comment.questionId, comment.commentId, comment.text, comment.userName);
         });
         this.setState({comments});
-        
-
-    }
-    
-    render(){
-        return (
-            <>
-                <div className="card">
-                <QuestionBodyComponent question = {this.state.question}/>
-                </div>
-                {this.commentsToHtmlListItems(this.state.comments)};
-            </>
-        );
     }
 
     commentsToHtmlListItems(comments){
         let ret = [];
         for(let i=0;i<comments?.length;i++){
             let comment = comments?.[i];
-            if(!comment) continue;
+            if(!comment || !comment.commentId || !comment.questionId || !comment.text || !comment.userName){
+                continue;
+            }
             //ret.push(<li key={question.id} className="list-group-item"> <QuestionComponent question={question}>/></li>);
-            ret.push(<CommentComponent key={comment.cid} comment ={comment}/>);
+            ret.push(<CommentComponent key={comment.commentId} comment ={comment}/>);
         }
         return ret;
     }
@@ -69,6 +78,5 @@ class CommentListClassComponent extends Component{
 
 export default function CommentListComponent(props){
     const params = useParams();
-    return <CommentListClassComponent {...props} params = {params}/>  ;
-   ;
+    return <CommentListClassComponent {...props} params = {params}/>;
 }

@@ -17,7 +17,6 @@ export default class AuthenticationService{
     }
 
     static isLoggedIn(){
-        return true;
         let loggedInUser = sessionStorage.getItem(AuthenticationService.userLabel);
         if(loggedInUser == null)  return false;
         return true;

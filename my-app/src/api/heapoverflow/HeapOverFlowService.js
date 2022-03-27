@@ -4,17 +4,15 @@ import AuthenticationService from "../../components/shared/AuthenticationService
 export default class HeapOverFlowService{
     static baseUrl = "http://localhost:8080"
     static baseJpaUrl = HeapOverFlowService.baseUrl //+ "/jpa"
+    static userUrl = HeapOverFlowService.baseUrl + "/user"
     static questionJpaUrl = HeapOverFlowService.baseUrl + "/questions"
     static authenticationUserName = "heaps";
     static authenticationPassword = "go123";
 
     constructor(){
         if(HeapOverFlowService._instance){
-            console.log("Returning cached instance");
             return HeapOverFlowService._instance;
         }
-
-        console.log("Returning new instance");
         
         //this.setupAxiosInterceptor();
         HeapOverFlowService._instance = this;
@@ -71,10 +69,33 @@ export default class HeapOverFlowService{
     }
 
     //comments
-    getCommentsByQuestionId(id){
-        let url = HeapOverFlowService.questionJpaUrl + `/${id}/comments`;
+    getCommentsByQuestionId(qid){
+        let url = HeapOverFlowService.questionJpaUrl + `/${qid}/comments`;
         console.log(`Hitting: ${url}`);
         return axios.get(url);
     }
 
+    postComment(qid, comment){
+        let url = HeapOverFlowService.questionJpaUrl + `/${qid}/comments`;
+        console.log(`Hitting: ${url}`);
+        return axios.post(url,comment);
+    }
+
+    //votes
+    postVotes(qid,votes){
+        if(typeof votes === 'string')  votes = parseInt(votes);
+        const user = AuthenticationService.getLoggedInUserName();
+
+        let url = HeapOverFlowService.questionJpaUrl + `/${qid}/votes`;
+        console.log(`Hitting: ${url}`);
+        return axios.post(url,{votes, user});
+    }
+
+    getMyVoteStatus(qid){
+        const user = AuthenticationService.getLoggedInUserName();
+
+        let url = HeapOverFlowService.userUrl + `/${user}/${qid}`;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url);
+    }
 }

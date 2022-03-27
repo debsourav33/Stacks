@@ -13,7 +13,7 @@ class QuestionActionsClassComponent extends Component{
 
     render(){
         return(
-            <div style={{display: "inline"}}>
+            <div style={{display: "inline-block"}}>
             <button className="btn btn-warning btn-sized" style = {{marginRight: "5px"}} onClick={() => this.onQuestionDeleteClicked(this.props.question)}>Delete</button>
             <button className="btn btn-success" onClick={() => this.onViewCommentsCalled(this.props.question)}>Comment</button>
             </div>
