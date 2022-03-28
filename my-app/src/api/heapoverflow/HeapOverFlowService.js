@@ -82,6 +82,12 @@ export default class HeapOverFlowService{
     }
 
     //votes
+    getVotes(qid){
+        let url = HeapOverFlowService.questionJpaUrl + `/${qid}/votes`;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url);
+    }
+
     postVotes(qid,votes){
         if(typeof votes === 'string')  votes = parseInt(votes);
         const user = AuthenticationService.getLoggedInUserName();

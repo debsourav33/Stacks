@@ -9,7 +9,13 @@ class VotesController{
 
     constructor(){
         this.postVotesToQuestion = this.postVotesToQuestion.bind(this);
-        this.calculateVoteChanges = this.calculateVoteChanges.bind(this);
+        this.getVotesCount = this.getVotesCount.bind(this);
+    }
+
+    getVotesCount(req,res,next){
+        const qid = parseInt(req.params.qid);
+        const votes = this.questionRepository.getVotesById(qid);
+        res.json({questionId: qid, votes});
     }
 
     postVotesToQuestion(req,res,next){
@@ -30,14 +36,14 @@ class VotesController{
         */
 
         //Important: Calculate vote changes first and then store new vote activity
-        const voteChanges = this.calculateVoteChanges(user,qid,votes);
+        const voteChanges = this.#calculateVoteChanges(user,qid,votes);
         this.questionRepository.addVotesToQuestion(qid,voteChanges);
         
         this.userActivityRepository.storeVoteActivity(user,qid,votes);
         res.json({question: this?.questionRepository?.getDummyQuestionById(qid)});
     }
 
-    calculateVoteChanges(user,qid,newVoteStatus){
+    #calculateVoteChanges = (user,qid,newVoteStatus) => {
         const oldVoteStatus = this.userActivityRepository.getVoteStatus(user,qid);
         const voteChanges= newVoteStatus - oldVoteStatus;
         console.log(`Old voteStatus: ${oldVoteStatus}, New VoteStatus: ${newVoteStatus}, voteChanges: ${voteChanges}`);

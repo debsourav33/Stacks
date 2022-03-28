@@ -5,6 +5,7 @@ const router = express.Router({mergeParams: true});
 
 const controller = new VotesController();
 
+router.get('',controller.getVotesCount);
 router.post('',controller.postVotesToQuestion);
 
 module.exports = router;

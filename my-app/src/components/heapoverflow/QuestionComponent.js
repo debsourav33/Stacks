@@ -12,7 +12,7 @@ export default class QuestionComponent extends Component{
             <div>
                 <div className="card_orig">
                     <div style={{display: "inline"}}>
-                    <VoteComponent myVote={this.props.myVote} votes={this.props.question.votes} voteCallback={this.voteCallback}/>
+                    <VoteComponent questionId={this.props.question.id}/>
                     <QuestionBodyComponent question={this.props.question}/>
                     </div>
                     <div>

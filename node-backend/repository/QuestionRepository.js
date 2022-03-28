@@ -59,6 +59,16 @@ class QuestionRepository{
         }
     }
 
+    getVotesById = (qid) => {
+        if(typeof qid === 'string')  qid = parseInt(qid);
+
+        const question = this.dummyQuestions.find( q => {
+            return q.id === qid;
+        });
+
+        return question ? question.votes : 0;
+    }
+
     saveQuestion = (question) => {
         this.dummyQuestions.push(question);
     }

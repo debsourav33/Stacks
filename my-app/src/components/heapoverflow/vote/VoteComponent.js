@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { Component } from "react/cjs/react.production.min";
+import HeapOverFlowService from '../../../api/heapoverflow/HeapOverFlowService';
 
 export default class VoteComponent extends Component{
     size = "30";
@@ -9,9 +10,11 @@ export default class VoteComponent extends Component{
     constructor(props){
         super(props);
         this.state = {
-            upVoteColor: this.colorGray,
-            downVoteColor : this.colorGray 
+            votes: 0,
+            myVote: 0
         };
+
+        this.retrieveAllandSetStates();
     }
 
     render(){
@@ -21,7 +24,7 @@ export default class VoteComponent extends Component{
                 <Icon icon="ic:baseline-thumb-up-alt" color={this.getUpVoteColor()} width={this.size} height={this.size} onClick = {()=> {this.onUpVoted()}}/>
             </>
             <div>
-                {this.props.votes}
+                {this.state.votes}
             </div>
             <>
                 <Icon icon="ic:baseline-thumb-up-off-alt" color={this.getDownVoteColor()} width={this.size} height={this.size} rotate={2} onClick = {()=> {this.onDownVoted()}}/>
@@ -30,9 +33,36 @@ export default class VoteComponent extends Component{
         );
     }
 
-    onUpVoted = () =>{
+    retrieveVotes = async (qid) => {
+        const response = await new HeapOverFlowService().getVotes(qid);
+        const votes = response.data.votes;
+        console.log(`Votes for Question ${response.data.questionId}: ${votes}`);
+        this.setState({votes});
+    }
+
+    retrieveMyVote = async (qid) => {
+        const response = await new HeapOverFlowService().getMyVoteStatus(qid);
+        const myVote = response?.data?.vote;
+        this.setState({myVote});
+        console.log(`My vote is ${myVote} on question ${qid}`);
+    }
+
+    postVoteToQuestion = (qid, myVote) =>{
+        const ret = new Promise((resolve,reject) => {
+            (async() => {
+            const response = await new HeapOverFlowService().postVotes(qid, myVote);
+            console.log("Vote Changed for Question:");
+            console.log(response.data.question);
+            resolve();
+            })();
+        });
+
+        return ret;
+    }
+
+    onUpVoted = async () =>{
         let myNewVote = 0;
-        switch(this.props.myVote){
+        switch(this.state.myVote){
             case 0:
                 myNewVote = 1;
                 break;
@@ -45,12 +75,14 @@ export default class VoteComponent extends Component{
             default:
                 break;
         }
-        this.props.voteCallback(myNewVote);
+        //this.props.voteCallback(myNewVote);
+        await this.postVoteToQuestion(this.props.questionId, myNewVote);
+        this.retrieveAllandSetStates();
     }
 
-    onDownVoted = () =>{
+    onDownVoted = async () =>{
         let myNewVote = 0;
-        switch(this.props.myVote){
+        switch(this.state.myVote){
             case 0:
                 myNewVote= -1;
                 break;
@@ -63,11 +95,18 @@ export default class VoteComponent extends Component{
             default:
                 break;
         }
-        this.props.voteCallback(myNewVote);
+        //this.props.voteCallback(myNewVote);
+        await this.postVoteToQuestion(this.props.questionId, myNewVote);
+        this.retrieveAllandSetStates();
+    }
+
+    retrieveAllandSetStates = () => {
+        this.retrieveVotes(this.props.questionId);
+        this.retrieveMyVote(this.props.questionId);
     }
 
     getUpVoteColor = () => {
-        switch(this.props.myVote){
+        switch(this.state.myVote){
             case 0:
             case -1:
                 return this.colorGray;
@@ -79,7 +118,7 @@ export default class VoteComponent extends Component{
     }
 
     getDownVoteColor = () => {
-        switch(this.props.myVote){
+        switch(this.state.myVote){
             case 0:
             case 1:
                 return this.colorGray;
