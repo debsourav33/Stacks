@@ -19,9 +19,9 @@ export default class VoteComponent extends Component{
 
     render(){
         return (
-            <div style={{display:"inline"}}>
+            <div style={{display:"inline-block", margin:"3% 3%"}}>
             <>
-                <Icon icon="ic:baseline-thumb-up-alt" color={this.getUpVoteColor()} width={this.size} height={this.size} onClick = {()=> {this.onUpVoted()}}/>
+                <Icon icon="ic:baseline-thumb-up-off-alt" color={this.getUpVoteColor()} width={this.size} height={this.size} onClick = {()=> {this.onUpVoted()}}/>
             </>
             <div>
                 {this.state.votes}

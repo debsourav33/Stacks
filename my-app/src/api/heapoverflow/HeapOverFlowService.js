@@ -49,7 +49,21 @@ export default class HeapOverFlowService{
     }
 
     retrieveAllQuestions(){
-        return axios.get(HeapOverFlowService.questionJpaUrl);
+        let url = HeapOverFlowService.questionJpaUrl;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url);
+    }
+
+    retrieveAllQuestionsSortedByVotesAsc(){
+        let url = HeapOverFlowService.questionJpaUrl;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url, {params: {sort_by: "votes", order_by: "asc"}});
+    }
+
+    retrieveAllQuestionsSortedByVotesDesc(){
+        let url = HeapOverFlowService.questionJpaUrl;
+        console.log(`Hitting: ${url}`);
+        return axios.get(url, {params: {sort_by: "votes", order_by: "desc"}});
     }
 
     getQuestion(id){

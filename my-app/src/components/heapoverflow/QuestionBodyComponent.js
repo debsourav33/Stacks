@@ -27,10 +27,10 @@ export default class QuestionBodyComponent extends Component{
             */    
             }
         return(
-            <>
+            <div style={{display:"inline-block"}}>
                 <h4>{this.props.question?.title}</h4>
                 {this.props.question?.description}
-            </>           
+            </div>           
         );
     }
 }

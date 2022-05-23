@@ -6,24 +6,23 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "./js_module/redux/ReduxStore";
 import LoginComponent from "./components/shared/login";
-import DynamicLoginPage from "./components/shared/DynamicLoginPage";
 import HeaderComponent from "./components/shared/Header";
 import LogoutComponent from "./components/shared/logout";
-import FooterComponent from "./components/shared/Footer";
-import AuthenticationService from "./components/shared/AuthenticationService";
 import AuthenticatedRoute from "./components/shared/AuthenticatedRoute";
-import HeapOverFlowService from "./api/heapoverflow/HeapOverFlowService";
 import QuestionFeedComponent from "./components/heapoverflow/QuestionFeedComponent";
-import Main from "./js_module/Main";
 import QuestionPostComponent from "./components/heapoverflow/QuestionPostComponent";
 import CommentListClassComponent from "./components/heapoverflow/comment/CommentListComponent";
 
 class App extends Component {
   
   render(){  
-    //new Main().run();     
+    //new Main().run();
     return (
+      <Provider store={store}>
       <div className="App">
         <Router>
           <HeaderComponent/>
@@ -39,6 +38,7 @@ class App extends Component {
         </Router>
         
       </div>
+      </Provider>
     );
   }  
 }

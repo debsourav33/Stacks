@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import HeapOverFlowService from "../../api/heapoverflow/HeapOverFlowService";
 import AuthenticationService from "./AuthenticationService";
 import {useNavigate} from "react-router-dom";
-import DynamicLoginPage from "./DynamicLoginPage"
 import "./login.css"
-import VoteComponent from "../heapoverflow/vote/VoteComponent";
+
+import {connect} from 'react-redux';
+import { registerSuccesfulLogin } from "../../js_module/redux";
 
 class LoginClassComponnent extends Component{
     #userNameAttr = 'username'
@@ -18,16 +19,22 @@ class LoginClassComponnent extends Component{
         this.attemptLogin = this.attemptLogin.bind(this);
 
         this.#userDict["deb33"] = "admin123";
+        
+    }
+
+    componentDidMount(){
+        setTimeout(() => {console.log(this.props); this.props.registerUser("Souvik");}
+        , 3000);
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return false;
+        return nextProps.user && (!this.props.user || this.props.user !== nextProps.user);
     }
 
     render(){
         return(
             <div className="login">
-                <div> Please Login With a Valid Credential </div>
+                <div> Please Login With a Valid Credential or {this.props.user} </div>
                 <div>
                 UserName <input type="text" name ={this.#userNameAttr} onChange={this.onInputChange}/>
                 Password <input type="password" name ={this.#passwordAttr} onChange={this.onInputChange}/>
@@ -53,7 +60,6 @@ class LoginClassComponnent extends Component{
         promise.then(response => {
             console.log("Login Succesful");
             console.log(response)
-            
             AuthenticationService.registerSuccesfulLogin(this.state[this.#userNameAttr], this.state[this.#passwordAttr]);
             callback()
             
@@ -68,8 +74,18 @@ class LoginClassComponnent extends Component{
 
 //export default LoginComponent;
 
-export default function LoginComponent(props) {
+function LoginComponent(props) {
     const navigation = useNavigate();
   
     return <LoginClassComponnent {...props} navigate={navigation} />;
 }
+
+const mapStateToProps = (state) => {
+    return {user: state.username};
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {registerUser: (userName) => dispatch(registerSuccesfulLogin(userName,"***"))};
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(LoginComponent);

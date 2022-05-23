@@ -11,7 +11,7 @@ export default class QuestionComponent extends Component{
         return(
             <div>
                 <div className="card_orig">
-                    <div style={{display: "inline"}}>
+                    <div>
                     <VoteComponent questionId={this.props.question.id}/>
                     <QuestionBodyComponent question={this.props.question}/>
                     </div>
@@ -26,14 +26,5 @@ export default class QuestionComponent extends Component{
     onQuestionUpdated = () =>{
         //after updating questions (deletion/votes), refresh the page
         this.props.questionUpdated();
-    }
-
-    voteCallback = async (myVote) =>{
-        const response = await new HeapOverFlowService().postVotes(this.props.question.id, myVote);
-        console.log("Vote Changed for Question:");
-        console.log(response.data.question);
-
-        //after updating votes, refresh the page
-        this.onQuestionUpdated();
     }
 }
