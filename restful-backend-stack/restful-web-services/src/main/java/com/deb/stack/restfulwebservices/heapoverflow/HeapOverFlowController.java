@@ -24,6 +24,10 @@ public class HeapOverFlowController {
 	@Autowired
 	QuestionService questionService;
 
+	public HeapOverFlowController() {
+		System.out.println("HeapController Started");
+	}
+
 	@GetMapping("/questions")
 	public List<Question> getAllQuestions() {
 		return questionService.retrieveAllQuestions();
