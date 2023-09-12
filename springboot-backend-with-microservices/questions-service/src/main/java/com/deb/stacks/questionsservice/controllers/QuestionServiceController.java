@@ -16,10 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deb.stacks.questionsservice.models.Question;
 
+//Since this is an spring component, this class should be up and running once this springboot application is run
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/questions")  //any url of localhost:port/questions will reach this rest controller
 public class QuestionServiceController {
     public static Long id = 100L;
+
+    
+
+    public QuestionServiceController() {
+        System.out.println("QS started");
+    }
 
     public static List<Question> questions = Arrays.asList(
         new Question(++id, "Centering Div", "How to Center the Div","heaps"),
@@ -44,7 +51,7 @@ public class QuestionServiceController {
     }
 
     @GetMapping("/user/{userName}")
-    List<Question> getQuestionForID(@PathVariable("userName") String userName){
+    List<Question> getQuestionForUser(@PathVariable("userName") String userName){
         List<Question> ret = questions.stream()
                             .filter(question -> question.getUserName().equals(userName))
                             .collect(Collectors.toList());
