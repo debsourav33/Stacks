@@ -1,5 +1,6 @@
 package com.deb.stacks.questionsservice.models;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -10,7 +11,8 @@ public class Question {
 	private String title;
 	private String description;
 	private String userName;
-	
+	List<Answer> answers;
+
 	public Question() {
 		
 	}
@@ -53,6 +55,14 @@ public class Question {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
 	}
 
 	@Override

@@ -39,16 +39,16 @@ public class AnswerServiceController {
 
 
     @GetMapping("/questionId/{qid}")
-    List<Answer> getAnswersForQuestion(Long qid){
+    List<Answer> getAnswersForQuestion(@PathVariable("qid") Long qid){
         return AnswerServiceController.Answers.stream()
-                .filter(answer -> answer.getQuestionID() == qid)
+                .filter(answer -> answer.getQuestionID().equals(qid))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    Answer getAnswerForID(@PathVariable("id" ) Long id){
+    Answer getAnswerForID(@PathVariable("id") Long id){
         for(Answer answer: Answers){
-            if(answer.getId() == id)  
+            if(answer.getId().equals(id))  
                 return answer;
         }
 

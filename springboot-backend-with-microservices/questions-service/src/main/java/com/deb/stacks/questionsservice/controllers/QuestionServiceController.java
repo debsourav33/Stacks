@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.deb.stacks.questionsservice.models.Answer;
 import com.deb.stacks.questionsservice.models.Question;
 
 //Since this is an spring component, this class should be up and running once this springboot application is run
 @RestController
 @RequestMapping("/questions")  //any url of localhost:port/questions will reach this rest controller
 public class QuestionServiceController {
-    public static Long id = 100L;
-
+    private static Long id = 100L;
+    private RestTemplate restTemplate = new RestTemplate(); 
     
 
     public QuestionServiceController() {
@@ -34,16 +36,15 @@ public class QuestionServiceController {
         new Question(++id, "React Native vs Flutter", "Who wins between these 2 cross-platforms?","tales")
     );
 
-
     @GetMapping("")
     List<Question> getAllQuestions(){
         return QuestionServiceController.questions;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     Question getQuestionForID(@PathVariable("id" ) Long id){
         for(Question question: questions){
-            if(question.getId() == id)  
+            if(question.getId().equals(id))  
                 return question;
         }
 
@@ -59,4 +60,22 @@ public class QuestionServiceController {
         return ret;
     }
 
+    @GetMapping("/questions&Answers/{id}")
+    Question getQuestionAndAnswersForID(@PathVariable("id") Long id){
+        Question ret = getQuestionForID(id);
+        
+        if(ret!=null){
+            //ask answer service for the answers for this question
+            
+            String url = "http://localhost:8082/answers/questionId/" + ret.getId();
+
+            //we are expecting a list of answers, so argument responseType = Answer[].class
+            Answer[] answers = restTemplate.getForObject(url, Answer[].class);
+            if(answers!=null){
+                ret.setAnswers(Arrays.asList(answers));
+            }
+        }
+
+        return ret;
+    }
 }
