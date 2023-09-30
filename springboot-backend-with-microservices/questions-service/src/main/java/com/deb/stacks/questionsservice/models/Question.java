@@ -7,22 +7,22 @@ import java.util.Objects;
 public class Question {
 	
 	private Long id; 
-	
-	private String title;
-	private String description;
-	private String userName;
 	List<Answer> answers;
+	private QuestionBody questionBody;
+	private String owner;
 
 	public Question() {
 		
 	}
 	
-	public Question(Long id, String title, String description, String userName) {
-		super();
+	public Question(Long id, String owner, QuestionBody questionBody) {
 		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.userName = userName;
+		this.owner = owner;
+		this.questionBody = questionBody;
+	}
+
+	public Question(Long id, String title, String description, String owner) {
+		this(id, owner, new QuestionBody(title,description));
 	}
 
 	public Long getId() {
@@ -32,29 +32,13 @@ public class Question {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 	
-	public String getUserName() {
-		return userName;
+	public String getOwner() {
+		return owner;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setOwner(String userName) {
+		this.owner = userName;
 	}
 
 	public List<Answer> getAnswers() {
@@ -68,6 +52,14 @@ public class Question {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public QuestionBody getQuestionBody() {
+		return questionBody;
+	}
+
+	public void setQuestionBody(QuestionBody questionBody) {
+		this.questionBody = questionBody;
 	}
 
 	@Override
