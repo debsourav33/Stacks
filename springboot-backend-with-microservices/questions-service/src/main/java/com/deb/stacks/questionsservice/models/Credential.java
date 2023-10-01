@@ -1,4 +1,4 @@
-package com.deb.stacks.userservice.Models;
+package com.deb.stacks.questionsservice.models;
 
 public class Credential {
     private String userId, password;

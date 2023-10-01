@@ -118,7 +118,7 @@ public class QuestionServiceController {
         //check if user is authorised for deleting this question -> i.e, he was the creator
         User user = authorize(headers);
         if(user==null)  
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No user header provided");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
         
         //first filter the list to find question that has the desired id and userName
         Optional<Question> question = questions.stream()
@@ -158,6 +158,5 @@ public class QuestionServiceController {
         User user = restTemplate.exchange(url, HttpMethod.GET, entity, User.class).getBody();
 
         return user;
-        
     }
 }

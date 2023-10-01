@@ -1,7 +1,5 @@
 package com.deb.stacks.questionsservice.models;
 
-import com.deb.stacks.userservice.Models.Credential;
-
 public class User {
     private String name;
     private Credential credential;

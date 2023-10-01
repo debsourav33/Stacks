@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class QuestionsServiceApplication {
 
+	//since this is the starting component, the bean will be inited
+	//and supplied to every autowired RestTemplate variable
 	@Bean
 	public RestTemplate getRestTemplate(){
 		return new RestTemplate();
