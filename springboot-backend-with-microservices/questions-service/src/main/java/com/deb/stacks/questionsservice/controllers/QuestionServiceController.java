@@ -56,14 +56,26 @@ public class QuestionServiceController {
 
     @GetMapping("")
     List<Question> getAllQuestions(){
-        return QuestionServiceController.questions;
+        var questionWithAnswers = QuestionServiceController.questions.stream()
+                .map(question -> {
+                    //fetch answers for all questions
+                    Long id = question.getId();
+                    question.setAnswers(fetchAnswers(id));
+                    return question;
+                }).collect(Collectors.toList());
+
+        return questionWithAnswers;
     }
 
     @GetMapping("/id/{id}")
     Question getQuestionForID(@PathVariable("id" ) Long id){
         for(Question question: questions){
-            if(question.getId().equals(id))  
+            if(question.getId().equals(id)){  
+                //question found
+                //fetch answers for the question
+                question.setAnswers(fetchAnswers(id));
                 return question;
+            }
         }
 
         return null;
@@ -158,5 +170,13 @@ public class QuestionServiceController {
         User user = restTemplate.exchange(url, HttpMethod.GET, entity, User.class).getBody();
 
         return user;
+    }
+
+    private List<Answer> fetchAnswers(long qID){
+        //consult answer service
+        String url = "http://localhost:8082/answers/questionId/" + qID;
+        List<Answer> answers = Arrays.asList(restTemplate.getForObject(url,  Answer[].class));
+        return answers;
+
     }
 }
