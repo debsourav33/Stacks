@@ -3,6 +3,7 @@ package com.deb.stacks.userservice.Repositories;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
@@ -33,8 +34,9 @@ public class UserRepository {
         String userId = credential.getUserId();
         String password = credential.getPassword();
         
+        //use Object.equals for null safety
         for(User registeredUser: users){
-            if(userId.equals(registeredUser.getId()) && password.equals(registeredUser.getPassword()))
+            if(Objects.equals(userId, registeredUser.getId()) && Objects.equals(password,registeredUser.getPassword()))
                 return registeredUser;
         }
 

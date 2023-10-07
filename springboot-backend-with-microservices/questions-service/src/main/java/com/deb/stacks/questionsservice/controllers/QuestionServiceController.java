@@ -18,6 +18,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import com.deb.stacks.questionsservice.models.User;
 
 //Since this is an spring component, this class should be up and running once this springboot application is run
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/questions")  //any url of localhost:port/questions will reach this rest controller
 public class QuestionServiceController {
     private static Long id = 100L;

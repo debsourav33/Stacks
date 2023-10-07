@@ -3,17 +3,23 @@ package com.deb.stacks.answerservice.models;
 public class Answer {
     private Long id; 
 	private Long questionID;
-	private String answer;
-	private String userName;
-    
+	private String userId;
+    private AnswerBody answerBody;
+
     public Answer() {
     }
 
-    public Answer(Long id, Long questionID, String answer, String userName) {
+    public Answer(Long id, Long questionID, AnswerBody answerBody, String userName) {
         this.id = id;
         this.questionID = questionID;
-        this.answer = answer;
-        this.userName = userName;
+        this.userId = userName;
+        this.answerBody = answerBody;
+    }
+
+
+
+    public Answer(Long id, Long questionID, String answer, String userName) {
+        this(id,questionID,new AnswerBody(answer),userName);
     }
 
     public Long getId() {
@@ -32,24 +38,20 @@ public class Answer {
         this.questionID = questionID;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAnswer(String question) {
-        this.answer = question;
+    public void setUserId(String userName) {
+        this.userId = userName;
     }
 
-    public String getUserName() {
-        return userName;
+    public AnswerBody getAnswerBody() {
+        return answerBody;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    
-
-    
+    public void setAnswerBody(AnswerBody answerBody) {
+        this.answerBody = answerBody;
+    }    
 
 }
