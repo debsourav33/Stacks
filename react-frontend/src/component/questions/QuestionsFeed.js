@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import QuestionsClient from "../api-client/questionsClient";
+import QuestionsClient from "../../api-client/QuestionsClient";
+import Question from "./Question";
 import "./questionsFeed.css"
 export default function QuestionFeed(){
     //useEffect is like componentDidMount
@@ -23,8 +24,8 @@ export default function QuestionFeed(){
 
     
     return (
-        <ul className="">
-           {questions.map(q => <li key={q.id}> {q.questionBody.body} </li>)}
-        </ul>
+        <div className="middle">
+           {questions.map(q => <Question question={q} key={q.id}/>)}
+        </div>
     )
 }

@@ -1,10 +1,17 @@
-import Login from "./component/login";
-import QuestionFeed from "./component/QuestionsFeed";
+import Login from "./component/Login";
+import QuestionFeed from "./component/questions/QuestionsFeed";
+import {BrowserRouter, Route, Routes} from "react-router-dom"
 
 function App() {
 
   return (
-    <QuestionFeed />
+    <BrowserRouter>
+    <Routes>
+      <Route path="" element={<Login/>}/>
+      <Route path="/questions" element={<QuestionFeed/>}/>
+      <Route path="/login" element={<Login/>}/>
+    </Routes>
+    </BrowserRouter>
   );
 }
 

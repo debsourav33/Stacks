@@ -2,6 +2,7 @@ import axios from "axios"
 
 export default class QuestionsClient{
     static questionUrl = "http://localhost:8080/questions"
+    static loginUrl = "http://localhost:8083/login"
     static dummyUserName = "heaps";
     static dummyPassword = "go123";
 
@@ -25,6 +26,17 @@ export default class QuestionsClient{
         let url = QuestionsClient.questionUrl;
         console.log(`Hitting: ${url}`);
         return axios.post(url,question);
+    }
+
+    login(userId, password){
+        const userObject = {
+            userId: userId,
+            password: password
+        }
+
+        let url = QuestionsClient.loginUrl;
+        console.log(`Hitting: ${url}`);
+        return axios.post(url,userObject);
     }
 
     

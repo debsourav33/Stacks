@@ -1,0 +1,12 @@
+.centered {
+    height: 100vh; /* Magic here */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .middle{
+    width: 50%; /* Set the width to 50% of the viewport width */
+    margin: 0 auto; 
+  }
