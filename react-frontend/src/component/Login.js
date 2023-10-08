@@ -1,7 +1,8 @@
 import React, { Component, useState } from "react";
-import QuestionsClient from "../api-client/QuestionsClient.js";
+import Client from "../api-client/Client.js";
 import "./login.css"
 import {useNavigate} from "react-router-dom"
+import "./common.css"
 
 export default function Login(){
     const [userId, setuserId] = useState("");
@@ -17,13 +18,17 @@ export default function Login(){
     }
 
     return(
-        <div className="login">
+        <div className="middle">
             <div> Please Login With a Valid Credential</div>
             <div>
-            userId <input type="text" name ="User ID" onChange={onUserIdChange}/>
-            Password <input type="password" name ="Password" onChange={onPasswordChange}/>
-            <button type="submit" className="btn btn-success" style={{margin: '10px'}} onClick={attemptLogin}>Login</button>
+                <input type="text" name ="userId" onChange={onUserIdChange}/>
+                <label htmlFor="userId">User ID</label>
             </div>
+            <div>
+                <input type="password" name ="password" onChange={onPasswordChange}/>
+                <label htmlFor="password">Password</label>
+            </div>
+            <button type="submit" className="btn btn-success" style={{margin: '10px'}} onClick={attemptLogin}>Login</button>
             
         </div>
     )
@@ -32,11 +37,13 @@ export default function Login(){
         console.log(userId);
         console.log(password);
 
-        const loginPromise = new QuestionsClient().login(userId, password);
+        const client = new Client();
+        const loginPromise = client.login(userId, password);
         loginPromise
         .then((res) => {            
             console.log(res);
             console.log("Navigating to questionsfeed");
+            client.setupAuthenticationHeader(userId, password);
             navigate("/questions");
         })
         .catch((err) => console.log(`Failed! ${err}`));
