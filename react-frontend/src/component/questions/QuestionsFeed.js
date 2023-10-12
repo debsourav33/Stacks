@@ -12,22 +12,18 @@ export default function QuestionFeed(){
     let renderCount = 0;
     console.log(renderCount+=1);
 
+    const questionClient = new Client();
+    
+    // useEffect is similar to componentDidMount()
+    //runs only once after the render is done (so questions are not fetched multiple times if it's placed inside return/render)
     useEffect(()=>{
-        const questionClient = new Client();
-        const questionPromise = questionClient.getAllQuestions();
-
-        questionPromise
-        .then((res) => {    
-            setQuestions(res.data);
-            console.log(res.data);
-        })
-        .catch((err) => console.log(err) );
+        fetchQuestions();
     },[]);
 
     
     return (
         <div className="question-feed-container">
-            <PostQuestion/>
+            <PostQuestion onPosted={onPosted}/>
             <h1 className="question-feed-title">Questions Feed</h1>
             {questions.map((q) => (
             <Question question={q} key={q.id} />
@@ -35,4 +31,20 @@ export default function QuestionFeed(){
       </div>
         
     )
+
+    function fetchQuestions(){
+        const questionPromise = questionClient.getAllQuestions();
+
+        questionPromise
+        .then((res) => {   
+            const reversedData = res.data.reverse();  
+            setQuestions(reversedData);
+            console.log(reversedData);
+        })
+        .catch((err) => console.log(err) );
+    }
+
+    function onPosted(){
+        fetchQuestions();
+    }
 }

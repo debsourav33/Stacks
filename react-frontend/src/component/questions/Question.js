@@ -16,7 +16,7 @@ export default function Question({ question }) {
 }
   
 
-export function PostQuestion(){
+export function PostQuestion({onPosted}){
     const [question, setQuestion] = useState("");
     const [title, setTitle] = useState("")
 
@@ -53,7 +53,7 @@ export function PostQuestion(){
     function onSubmit(){
         const questionPromise = new Client().postQuestion(title, question);
         questionPromise
-        .then((res) => console.log(res))
+        .then((res) => {console.log(res); onPosted();}) //onPosted callback invoked to refresh the feed
         .catch((err) => console.log(err));
     }
 
