@@ -24,12 +24,14 @@ export function PostQuestion({onPosted}){
         <div className="question-post-container">
         <input
           type="text"
+          value={title} //make it a controlled component so it can be reset
           onChange={onTitleChange}
           placeholder="Enter title..."
           className="question-post-input"
         />
         <input
           type="text"
+          value={question}  //make it a controlled component so it can be reset
           onChange={onQuestionChange}
           placeholder="Type your question here..."
           className="question-post-textarea"
@@ -51,9 +53,18 @@ export function PostQuestion({onPosted}){
     }
 
     function onSubmit(){
+
+
         const questionPromise = new Client().postQuestion(title, question);
         questionPromise
-        .then((res) => {console.log(res); onPosted();}) //onPosted callback invoked to refresh the feed
+        .then((res) => {
+          //clear the inputs
+          setTitle("");
+          setQuestion("");
+
+          console.log(res); 
+          onPosted();
+        }) //onPosted callback invoked to refresh the feed
         .catch((err) => console.log(err));
     }
 
