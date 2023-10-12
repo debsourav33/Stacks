@@ -12,11 +12,12 @@ export default function QuestionFeed(){
     let renderCount = 0;
     console.log(renderCount+=1);
 
-    const questionClient = new Client();
+    const client = new Client();
     
     // useEffect is similar to componentDidMount()
     //runs only once after the render is done (so questions are not fetched multiple times if it's placed inside return/render)
     useEffect(()=>{
+        setUserHeader(); //set user header every time page refreshes
         fetchQuestions();
     },[]);
 
@@ -33,7 +34,7 @@ export default function QuestionFeed(){
     )
 
     function fetchQuestions(){
-        const questionPromise = questionClient.getAllQuestions();
+        const questionPromise = client.getAllQuestions();
 
         questionPromise
         .then((res) => {   
@@ -46,5 +47,13 @@ export default function QuestionFeed(){
 
     function onPosted(){
         fetchQuestions();
+    }
+    
+    //in terms of page refresh, fetch from local storage and set the header again
+    function setUserHeader(){
+        const user = localStorage.getItem("user");
+        const password = localStorage.getItem("password");
+
+        client.setupAuthenticationHeader(user,password);
     }
 }

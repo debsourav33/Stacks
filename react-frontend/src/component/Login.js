@@ -21,11 +21,19 @@ export default function Login(){
         <div className="login-container">
           <div className="login-heading">Please Login With a Valid Credential</div>
           <div className="input-container">
-            <input type="text" name="userId" onChange={onUserIdChange} />
+            <input 
+            type="text" 
+            name="userId"
+            value = {userId} 
+            onChange={onUserIdChange} />
             <label htmlFor="userId">User ID</label>
           </div>
           <div className="input-container">
-            <input type="password" name="password" onChange={onPasswordChange} />
+            <input 
+            type="password" 
+            name="password"
+            value = {password} 
+            onChange={onPasswordChange} />
             <label htmlFor="password">Password</label>
           </div>
           <button
@@ -48,13 +56,29 @@ export default function Login(){
         const client = new Client();
         const loginPromise = client.login(userId, password);
         loginPromise
-        .then((res) => {            
+        .then((res) => {         
             console.log(res);
             console.log("Navigating to questionsfeed");
             client.setupAuthenticationHeader(userId, password);
+
+            //save credentials to localStorage
+            storeCredential()
+            
+            //reset the input fields
+            setuserId("")
+            setPassword("")
+
+            //succesful login will route to questions page
             navigate("/questions");
         })
         .catch((err) => console.log(`Failed! ${err}`));
+    }
+
+    //in case of page refresh, we need to update user header again
+    //so store it in local storage
+    function storeCredential(){
+      localStorage.setItem("user",userId);
+      localStorage.setItem("password",password)
     }
     
 }
