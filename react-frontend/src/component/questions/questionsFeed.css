@@ -10,3 +10,17 @@
     width: 50%; /* Set the width to 50% of the viewport width */
     margin: 0 auto; 
   }
+
+  /* QuestionFeed.css */
+
+  .question-feed-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .question-feed-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }

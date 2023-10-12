@@ -2,41 +2,42 @@ import { useState } from 'react'
 import Client from '../../api-client/Client';
 import './question.css'
 
-export default function Question({question}){
+
+export default function Question({ question }) {
     return (
-        <div style={{margin: 15}}>
-            <h1> {question.questionBody.title} </h1>
-            {question.questionBody.body} <br/>
-            by <b> {question.owner} </b>
-        </div>
-    )
+      <div className="question-container">
+        <h1 className="question-title">{question.questionBody.title}</h1>
+        <p className="question-body">{question.questionBody.body}</p>
+        <p className="question-owner">
+          by <b>{question.owner}</b>
+        </p>
+      </div>
+    );
 }
+  
 
 export function PostQuestion(){
     const [question, setQuestion] = useState("");
     const [title, setTitle] = useState("")
 
     return(
-        <>
-        <div>
-            <input 
-                type="text" 
-                onChange={onTitleChange} 
-                placeholder="Enter title..."
-                style={{ width: '300px', height: '30px' }}
-            />
-        </div>
-        <div>
-            <input 
-                type="text" 
-                onChange={onQuestionChange} 
-                placeholder="Type your question here..."
-                style={{ width: '300px', height: '60px' }}
-            />
-
-        </div>
-        <button onClick={onSubmit}>Submit</button>
-        </>
+        <div className="question-post-container">
+        <input
+          type="text"
+          onChange={onTitleChange}
+          placeholder="Enter title..."
+          className="question-post-input"
+        />
+        <input
+          type="text"
+          onChange={onQuestionChange}
+          placeholder="Type your question here..."
+          className="question-post-textarea"
+        />
+        <button onClick={onSubmit} className="question-post-button">
+          Submit
+        </button>
+      </div>
     )
 
     function onTitleChange(event){

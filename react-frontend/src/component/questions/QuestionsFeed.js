@@ -26,9 +26,13 @@ export default function QuestionFeed(){
 
     
     return (
-        <div className="middle">
+        <div className="question-feed-container">
             <PostQuestion/>
-           {questions.map(q => <Question question={q} key={q.id}/>)}
-        </div>
+            <h1 className="question-feed-title">Questions Feed</h1>
+            {questions.map((q) => (
+            <Question question={q} key={q.id} />
+            ))}
+      </div>
+        
     )
 }
