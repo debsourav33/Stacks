@@ -1,9 +1,14 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Client from '../../api-client/Client';
 import './question.css'
 
 
 export default function Question({ question }) {
+    const navigate = useNavigate();
+
+    console.log(question)
+
     return (
       <div className="question-container">
         <h1 className="question-title">{question.questionBody.title}</h1>
@@ -11,9 +16,26 @@ export default function Question({ question }) {
         <p className="question-owner">
           by <b>{question.owner}</b>
         </p>
+        <button onClick={onAnswerclicked} style={{color:'green'}}>
+          <img 
+          src={process.env.PUBLIC_URL + '/images/comments.svg'} 
+          width="20" 
+          height="20"
+          alt="Answers"
+          />
+          {" " + question.answers.length} {/*no of answers*/}
+
+        </button>
       </div>
     );
+
+    function onAnswerclicked(){
+      //navigate to answers page
+      navigate(`/questions/${question.id}`)
+    }
+    
 }
+
   
 
 export function PostQuestion({onPosted}){
