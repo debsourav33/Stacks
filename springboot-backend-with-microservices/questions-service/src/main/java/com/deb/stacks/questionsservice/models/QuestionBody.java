@@ -1,5 +1,8 @@
 package com.deb.stacks.questionsservice.models;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class QuestionBody {
     private String title;
     private String body;

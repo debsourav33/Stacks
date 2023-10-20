@@ -4,10 +4,24 @@ import java.util.List;
 import java.util.Objects;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+
+@Entity
 public class Question {
 	
-	private Long id; 
+	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id; 
+
+	@OneToMany
 	List<Answer> answers;
+
+
 	private QuestionBody questionBody;
 	private String owner;
 
@@ -23,6 +37,15 @@ public class Question {
 
 	public Question(Long id, String title, String description, String owner) {
 		this(id, owner, new QuestionBody(title,description));
+	}
+
+	public Question(String owner, QuestionBody questionBody) {
+		this.owner = owner;
+		this.questionBody = questionBody;
+	}
+
+	public Question(String title, String description, String owner) {
+		this(owner, new QuestionBody(title, description));
 	}
 
 	public Long getId() {

@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.deb.stacks.questionsservice.database.QuestionJpaRepository;
 import com.deb.stacks.questionsservice.models.Answer;
 import com.deb.stacks.questionsservice.models.Question;
 import com.deb.stacks.questionsservice.models.QuestionBody;
+import com.deb.stacks.questionsservice.models.Result;
 import com.deb.stacks.questionsservice.models.User;
 
 //Since this is an spring component, this class should be up and running once this springboot application is run
@@ -43,6 +45,9 @@ public class QuestionServiceController {
 
     @Autowired
     private RestTemplate restTemplate; 
+
+    @Autowired
+    private QuestionJpaRepository repository;
     
     public QuestionServiceController() {
         System.out.println("QS started");
@@ -58,7 +63,8 @@ public class QuestionServiceController {
 
     @GetMapping("")
     List<Question> getAllQuestions(){
-        var questionWithAnswers = QuestionServiceController.questions.stream()
+        List<Question> questions = repository.findAll();
+        var questionWithAnswers = questions.stream()
                 .map(question -> {
                     //fetch answers for all questions
                     Long id = question.getId();
@@ -70,17 +76,14 @@ public class QuestionServiceController {
     }
 
     @GetMapping("/id/{id}")
-    Question getQuestionForID(@PathVariable("id" ) Long id){
-        for(Question question: questions){
-            if(question.getId().equals(id)){  
-                //question found
-                //fetch answers for the question
-                question.setAnswers(fetchAnswers(id));
-                return question;
-            }
+    ResponseEntity<Question> getQuestionForID(@PathVariable("id" ) Long id){
+        try{
+            Question ret = repository.findById(id).get(); //throws NoSuchElement exception
+            return ResponseEntity.status(HttpStatus.CREATED).body(ret);    
         }
-
-        return null;
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }        
     }
 
     @GetMapping("/user/{userName}")
@@ -94,7 +97,7 @@ public class QuestionServiceController {
 
     @GetMapping("/questions&Answers/{id}")
     Question getQuestionAndAnswersForID(@PathVariable("id") Long id){
-        Question ret = getQuestionForID(id);
+        Question ret = getQuestionForID(id).getBody();
         
         if(ret!=null){
             //ask answer service for the answers for this question
@@ -117,14 +120,16 @@ public class QuestionServiceController {
         User user = authorize(headers);
 
         if(user==null)  
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No user header provided");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
 
         
         //create the question from the extracted questionbody (requestBody) and creator's username (httpheader)
-        Question question = new Question(++id,user.getName(),questionBody);
+        Question question = new Question(user.getName(),questionBody);
+        Question postedQuestion = repository.saveAndFlush(question);
+
         questions.add(question);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Question posted successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created with id: "+postedQuestion.getId());
     }
     
     @DeleteMapping("/{id}")

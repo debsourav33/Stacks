@@ -1,9 +1,23 @@
 package com.deb.stacks.questionsservice.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Answers")
 public class Answer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id; 
+
 	private Long questionID;
-	private String userId;
+	
+    private String userId;
     private AnswerBody answerBody;
 
     public Answer() {
