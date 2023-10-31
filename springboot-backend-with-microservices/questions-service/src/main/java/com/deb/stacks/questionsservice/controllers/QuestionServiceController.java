@@ -44,108 +44,17 @@ public class QuestionServiceController {
     private static Long id = 100L;
 
     @Autowired
-    private RestTemplate restTemplate; 
+    protected RestTemplate restTemplate; 
 
     @Autowired
-    private QuestionJpaRepository repository;
+    protected QuestionJpaRepository repository;
     
     public QuestionServiceController() {
         System.out.println("QS started");
     }
 
-    @GetMapping("")
-    List<Question> getAllQuestions(){
-        List<Question> questions = repository.findAll();
-        var questionWithAnswers = questions.stream()
-                .map(question -> {
-                    //fetch answers for all questions
-                    Long id = question.getId();
-                    question.setAnswers(fetchAnswers(id));
-                    return question;
-                }).collect(Collectors.toList());
-
-        return questionWithAnswers;
-    }
-
-    @GetMapping("/id/{id}")
-    ResponseEntity<Question> getQuestionForID(@PathVariable("id" ) Long id){
-        try{
-            Question ret = repository.findById(id).get(); //throws NoSuchElement exception
-            return ResponseEntity.status(HttpStatus.CREATED).body(ret);    
-        }
-        catch(Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }        
-    }
-
-    @GetMapping("/user/{userName}")
-    List<Question> getQuestionForUser(@PathVariable("userName") String userName){
-        List<Question> ret = repository.findByOwner(userName);
-
-        return ret;
-    }
-
-    @GetMapping("/questions&Answers/{id}")
-    Question getQuestionAndAnswersForID(@PathVariable("id") Long id){
-        Question ret = getQuestionForID(id).getBody();
-        
-        if(ret!=null){
-            //ask answer service for the answers for this question
-            
-            String url = "http://localhost:8082/answers/questionId/" + ret.getId();
-
-            //we are expecting a list of answers, so argument responseType = Answer[].class
-            Answer[] answers = restTemplate.getForObject(url, Answer[].class);
-            if(answers!=null){
-                ret.setAnswers(Arrays.asList(answers));
-            }
-        }
-
-        return ret;
-    }
-
-    @PostMapping("/post")
-    ResponseEntity<String> postQuestion(@RequestHeader Map<String,String> headers, @RequestBody QuestionBody questionBody){
-        //check the user information
-        User user = authorize(headers);
-
-        if(user==null)  
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
-
-        
-        //create the question from the extracted questionbody (requestBody) and creator's username (httpheader)
-        Question question = new Question(user.getCredential().getUserId(),questionBody);
-        Question postedQuestion = repository.saveAndFlush(question);
-
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created with id: "+postedQuestion.getId());
-    }
-    
-    @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteQuestion(@RequestHeader Map<String,String> headers, @PathVariable("id") Long id){
-        //check if user is authorised for deleting this question -> i.e, he was the creator
-        User user = authorize(headers);
-        if(user==null)  
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
-        
-        //first filter the list to find question that has the desired id and userName
-        Optional<Question> question = repository.findById(id);
-        String userId = user.getId();
-
-        //if no such id exists
-        if(question.isEmpty())  
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No such question id");
-
-        //if you are not the creator of the question
-        if(!question.get().getOwner().equals(userId))  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + ", you are not the owner. The owner is: " + question.get().getOwner());
-
-        //id exist and you are the creator -> remove the question
-        repository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Question deleted");
-    }
-
     //delegate to user service for authorization
-    private User authorize(Map<String,String> headers){
+    protected User authorize(Map<String,String> headers){
         //convert map into httpheaders
         HttpHeaders httpHeaders = new HttpHeaders();
         for(Map.Entry<String,String> entry: headers.entrySet() ){
@@ -165,11 +74,5 @@ public class QuestionServiceController {
         return user;
     }
 
-    private List<Answer> fetchAnswers(long qID){
-        //consult answer service
-        String url = "http://localhost:8082/answers/questionId/" + qID;
-        List<Answer> answers = Arrays.asList(restTemplate.getForObject(url,  Answer[].class));
-        return answers;
-
-    }
+    
 }
