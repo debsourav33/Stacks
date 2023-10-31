@@ -53,14 +53,6 @@ public class QuestionServiceController {
         System.out.println("QS started");
     }
 
-    public static List<Question> questions = new ArrayList<>();
-
-    static{
-        questions.add(new Question(++id, "Centering Div", "How to Center the Div","heaps"));
-        questions.add(new Question(++id, "LifeCycle", "Tell me the difference between onStart and onResume","heaps"));
-        questions.add(new Question(++id, "React Native vs Flutter", "Who wins between these 2 cross-platforms?","tales"));
-    };
-
     @GetMapping("")
     List<Question> getAllQuestions(){
         List<Question> questions = repository.findAll();
@@ -88,9 +80,7 @@ public class QuestionServiceController {
 
     @GetMapping("/user/{userName}")
     List<Question> getQuestionForUser(@PathVariable("userName") String userName){
-        List<Question> ret = questions.stream()
-                            .filter(question -> question.getOwner().equals(userName))
-                            .collect(Collectors.toList());
+        List<Question> ret = repository.findByOwner(userName);
 
         return ret;
     }
@@ -124,10 +114,9 @@ public class QuestionServiceController {
 
         
         //create the question from the extracted questionbody (requestBody) and creator's username (httpheader)
-        Question question = new Question(user.getName(),questionBody);
+        Question question = new Question(user.getCredential().getUserId(),questionBody);
         Question postedQuestion = repository.saveAndFlush(question);
 
-        questions.add(question);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Created with id: "+postedQuestion.getId());
     }
@@ -140,10 +129,7 @@ public class QuestionServiceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
         
         //first filter the list to find question that has the desired id and userName
-        Optional<Question> question = questions.stream()
-                        .filter(q -> q.getId().equals(id))
-                        .findFirst();
-
+        Optional<Question> question = repository.findById(id);
         String userId = user.getId();
 
         //if no such id exists
@@ -153,8 +139,8 @@ public class QuestionServiceController {
         //if you are not the creator of the question
         if(!question.get().getOwner().equals(userId))  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userId + ", you are not the owner. The owner is: " + question.get().getOwner());
 
-        //id exist and you are the creator
-        questions.remove(question.get());
+        //id exist and you are the creator -> remove the question
+        repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Question deleted");
     }
 
