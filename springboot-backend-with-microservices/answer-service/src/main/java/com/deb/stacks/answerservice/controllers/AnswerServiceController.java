@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,67 +26,68 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.deb.stacks.answerservice.database.AnswerJpaRepository;
 import com.deb.stacks.answerservice.models.Answer;
 import com.deb.stacks.answerservice.models.AnswerBody;
 import com.deb.stacks.answerservice.models.User;
+
+import jakarta.annotation.PostConstruct;
 
 //Since this is an spring component, this class should be up and running once this springboot application is run
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/answers") //any url of localhost:port/answers will reach this rest controller
 public class AnswerServiceController {
-    private static Long id = 1000L;
-
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AnswerJpaRepository repository;
 
     public AnswerServiceController() {
         System.out.println("AnswerService Started");
     }
 
-    public static List<Answer> answers = new ArrayList<>();
+    @PostConstruct
+    public void initDB(){
+        //just do it one time
 
-    static{
-        answers.addAll(Arrays.asList(
-            new Answer(++id, 102L, "That's a bummer","crazy"),
-            new Answer(++id, 101L, "onResume is after onStart","surgicalMask"),
-            new Answer(++id, 102L, "Cross platforms perform worse","tales"),
-            new Answer(++id, 105L, "Restart pls","X"),
-            new Answer(++id, 102L, "To avoid complexities!","heaps"),
-            new Answer(++id, 101L, "Overhead will make it worse","tales")
-            )
-        );
+        //repository.saveAndFlush(new Answer(2L, "That's a bummer","crazy"));
+        //repository.saveAndFlush(new Answer(1L, "onResume is after onStart","surgicalMask"));
+        //repository.saveAndFlush(new Answer(2L, "Cross platforms perform worse","tales"));
+        //repository.saveAndFlush(new Answer(5L, "Restart pls","X"));
+        //repository.saveAndFlush(new Answer(2L, "To avoid complexities!","heaps"));
+        //repository.saveAndFlush(new Answer(1L, "Overhead will make it worse","tales"));
     }
 
     @GetMapping("")
     List<Answer> getAllAnswers(){
-        return AnswerServiceController.answers;
+        return repository.findAll();
     }
 
 
     @GetMapping("/questionId/{qid}")
     List<Answer> getAnswersForQuestion(@PathVariable("qid") Long qid){
-        return AnswerServiceController.answers.stream()
-                .filter(answer -> answer.getQuestionID().equals(qid))
-                .collect(Collectors.toList());
+        return repository.findByQuestionID(qid);
     }
 
     @GetMapping("/{id}")
-    Answer getAnswerForID(@PathVariable("id") Long id){
-        for(Answer answer: answers){
-            if(answer.getId().equals(id))  
-                return answer;
+    ResponseEntity<Answer> getAnswerForID(@PathVariable("id") Long id){
+        try{
+            Answer answer = repository.findById(id).get();
+            return ResponseEntity.status(HttpStatus.OK).body(answer);
         }
-
-        return null;
+        catch(IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        catch(NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @GetMapping("/user/{userName}")
     List<Answer> getAnswersForUser(@PathVariable("userName") String userName){
-        List<Answer> ret = answers.stream()
-                            .filter(answer -> answer.getUserId().equals(userName))
-                            .collect(Collectors.toList());
-
+        List<Answer> ret = repository.findByUserId(userName);
         return ret;
     }
 
@@ -99,10 +101,10 @@ public class AnswerServiceController {
 
         
         //create the answer from the extracted answerBody (requestBody) and creator's username (httpheader)
-        Answer answer = new Answer(++id, qid, answerBody, user.getId());
-        answers.add(answer);
+        Answer answer = new Answer(qid, answerBody, user.getId());
+        Answer savedAnswer = repository.saveAndFlush(answer);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Answer posted successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Answer posted successfully with ID " + savedAnswer.getId());
     }
 
     @DeleteMapping("/{id}")
@@ -113,9 +115,7 @@ public class AnswerServiceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No correct user header provided");
         
         //first filter the list to find question that has the desired id and userName
-        Optional<Answer> answer = answers.stream()
-                        .filter(q -> q.getId().equals(id))
-                        .findFirst();
+        Optional<Answer> answer = repository.findById(id);
 
         String userId = user.getId();
 
@@ -129,7 +129,7 @@ public class AnswerServiceController {
                     .body(userId + ", you are not the owner. The owner is: " + answer.get().getUserId());
 
         //id exist and you are the creator
-        answers.remove(answer.get());
+        repository.deleteById(id);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Answer deleted");
     }
     
@@ -153,5 +153,12 @@ public class AnswerServiceController {
 
         return user;
         
+    }
+
+
+    //just for testing
+    @DeleteMapping("")
+    public void deleteAllAnswer(){
+        repository.deleteAll();
     }
 }

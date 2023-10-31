@@ -1,16 +1,27 @@
 package com.deb.stacks.answerservice.models;
 
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Answer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id; 
+
 	private Long questionID;
 	private String userId;
+    
+    @Embedded
     private AnswerBody answerBody;
 
     public Answer() {
     }
 
-    public Answer(Long id, Long questionID, AnswerBody answerBody, String userName) {
-        this.id = id;
+    public Answer(Long questionID, AnswerBody answerBody, String userName) {
         this.questionID = questionID;
         this.userId = userName;
         this.answerBody = answerBody;
@@ -18,8 +29,8 @@ public class Answer {
 
 
 
-    public Answer(Long id, Long questionID, String answer, String userName) {
-        this(id,questionID,new AnswerBody(answer),userName);
+    public Answer(Long questionID, String answer, String userName) {
+        this(questionID,new AnswerBody(answer),userName);
     }
 
     public Long getId() {
