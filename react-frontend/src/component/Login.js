@@ -59,7 +59,7 @@ export default function Login(){
         .then((res) => {         
             console.log(res);
             console.log("Navigating to questionsfeed");
-            client.setupAuthenticationHeader(userId, password);
+            client.setupAuthHeader(userId, password);
 
             //save credentials to localStorage
             storeCredential()

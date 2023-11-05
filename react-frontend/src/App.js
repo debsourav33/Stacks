@@ -1,7 +1,7 @@
 import Login from "./component/Login";
 import QuestionFeed from "./component/questions/QuestionsFeed";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
-import Answers from "./component/answers/Answers";
+import Answers from "./component/answers/AnswerList";
 
 function App() {
 

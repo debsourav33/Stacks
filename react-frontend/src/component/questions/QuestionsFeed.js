@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 import Client from "../../api-client/Client";
 import Question from "./Question";
 import "./questionsFeed.css"
@@ -7,6 +8,7 @@ import { PostQuestion } from "./Question";
 export default function QuestionFeed(){
     //useEffect is like componentDidMount
     //only called once (after first render)
+    var navigate = useNavigate();
 
     const [questions, setQuestions] = useState([]);
     let renderCount = 0;
@@ -17,7 +19,7 @@ export default function QuestionFeed(){
     // useEffect is similar to componentDidMount()
     //runs only once after the render is done (so questions are not fetched multiple times if it's placed inside return/render)
     useEffect(()=>{
-        setUserHeader(); //set user header every time page refreshes
+        setUserHeader(); //set user header every time page refreshes (when page is refreshed app restarts losing all states)
         fetchQuestions();
     },[]);
 
@@ -27,11 +29,17 @@ export default function QuestionFeed(){
             <PostQuestion onPosted={onPosted}/>
             <h1 className="question-feed-title">Questions Feed</h1>
             {questions.map((q) => (
-            <Question question={q} key={q.id} />
+            <Question question={q} key={q.id} showAnswerButton={true} onAnswersButtonclicked={() => {
+                navigateToAnswers(q.id);
+            } }/>
             ))}
       </div>
         
     )
+
+    function navigateToAnswers(qid){
+        navigate(`/questions/${qid}`)
+    }
 
     function fetchQuestions(){
         const questionPromise = client.getAllQuestions();
@@ -54,6 +62,6 @@ export default function QuestionFeed(){
         const user = localStorage.getItem("user");
         const password = localStorage.getItem("password");
 
-        client.setupAuthenticationHeader(user,password);
+        client.setupAuthHeader(user,password);
     }
 }

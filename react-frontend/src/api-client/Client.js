@@ -7,13 +7,13 @@ export default class Client{
     static dummyUserName = "heaps";
     static dummyPassword = "go123";
 
-    async setupAuthenticationHeaderFromLocalStorage(){
+    async setupAuthHeaderFromLocalStorage(){
         const user = localStorage.getItem("user");
         const password = localStorage.getItem("password");
-        this.setupAuthenticationHeader(user,password);
+        this.setupAuthHeader(user,password);
     }
 
-    async setupAuthenticationHeader(userId, password){
+    async setupAuthHeader(userId, password){
         axios.interceptors.request.use(
             config => {
                 config.headers.user = userId;
@@ -59,6 +59,16 @@ export default class Client{
         let url = Client.questionUrl + `/post`;
         console.log(`Hitting: ${url}`);
         return axios.post(url,question);
+    }
+
+    postAnswer(qid, body){
+        const answer = {
+            answer : body
+        };
+
+        let url = Client.answersUrl + `/post` + `/questionId/${qid}`;
+        console.log(`Hitting: ${url}`);
+        return axios.post(url,answer);
     }
 
     login(userId, password){

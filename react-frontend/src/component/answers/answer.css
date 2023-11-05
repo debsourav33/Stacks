@@ -1,0 +1,82 @@
+/* answerfeed */
+
+.answer-feed-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+
+/* answer.css */
+
+.answer-container {
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .answer-body {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .answer-owner {
+    font-size: 14px;
+    color: #555;
+  }
+
+
+  /* Post Answer */
+
+  .answer-post-container {
+    background-color: #f5f5f5; /* Light gray background color */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .answer-post-input,
+  .answer-post-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* Add box-sizing property to ensure the input fields take up full width */
+    box-sizing: border-box;
+  }
+  
+  .answer-post-input {
+    /* Adjust the height for the title input */
+    height: 30px;
+  }
+  
+  .answer-post-textarea {
+    /* Adjust the height for the answer input */
+    height: 100px; /* Increase the height for the answer input */
+  }
+  
+  .answer-post-button {
+    background-color: #007bff; /* Blue button color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .answer-post-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
