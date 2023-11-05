@@ -1,0 +1,9 @@
+2023-11-04 18:07:31 jdbc[4]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUESTION" not found (this database is empty); SQL statement:
+select q1_0.id,q1_0.owner,q1_0.body,q1_0.title from question q1_0 [42104-214]
+2023-11-04 18:07:31 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUESTION" not found (this database is empty); SQL statement:
+select q1_0.id,q1_0.owner,q1_0.body,q1_0.title from question q1_0 [42104-214]
+2023-11-04 18:08:12 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUESTION" not found (this database is empty); SQL statement:
+select q1_0.id,q1_0.owner,q1_0.body,q1_0.title from question q1_0 [42104-214]

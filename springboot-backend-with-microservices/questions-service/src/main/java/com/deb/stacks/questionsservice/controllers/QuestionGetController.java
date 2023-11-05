@@ -38,7 +38,8 @@ public class QuestionGetController extends QuestionServiceController{
     ResponseEntity<Question> getQuestionForID(@PathVariable("id" ) Long id){
         try{
             Question ret = repository.findById(id).get(); //throws NoSuchElement exception
-            return ResponseEntity.status(HttpStatus.CREATED).body(ret);    
+            ret.setAnswers(fetchAnswers(ret.getId()));
+            return ResponseEntity.status(HttpStatus.OK).body(ret);    
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
