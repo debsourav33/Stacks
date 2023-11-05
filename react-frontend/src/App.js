@@ -3,6 +3,7 @@ import QuestionFeed from "./component/questions/QuestionsFeed";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import Answers from "./component/answers/AnswerList";
 import Header from "./header/Header";
+import Signup from "./component/Signup";
 
 function App() {
 
@@ -11,6 +12,8 @@ function App() {
     <Header/>
     <Routes>
       <Route path="" element={<Login/>}/>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/signup" element={<Signup/>}/>
       <Route path="/questions" element={<QuestionFeed/>}/>
       <Route path="/questions/:qid" element={<Answers/>}/>
       <Route path="/login" element={<Login/>}/>

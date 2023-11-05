@@ -4,10 +4,15 @@ import "./login.css"
 import {useNavigate} from "react-router-dom"
 import "./common.css"
 
-export default function Login(){
+export default function Signup(){
+    const [name, setName] = useState("");
     const [userId, setuserId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate()
+
+    const onNameChange = (event) => {
+      setName(event.target.name);
+    }
 
     const onUserIdChange = (event) => {
         setuserId(event.target.value);
@@ -19,7 +24,14 @@ export default function Login(){
 
     return (
         <div className="login-container">
-          <div className="login-heading">Please Login With a Valid Credential</div>
+          <div className="login-heading">Create an Account</div>
+          <div className="input-container">
+            <input 
+            type="text" 
+            name="name"
+            onChange={onNameChange} />
+            <label htmlFor="name">Name</label>
+          </div>
           <div className="input-container">
             <input 
             type="text" 
@@ -39,27 +51,28 @@ export default function Login(){
           <button
             type="submit"
             className="login-button"
-            onClick={attemptLogin}
+            onClick={attemptSignup}
           >
-            Login
+            Register
           </button>
           <div className="login-footer">
-            <p>Don't have an account? <a href="signup">Sign up</a></p>
+            <p>Already have an account? <a href="login">Login</a></p>
           </div>
         </div>
       );
 
-    function attemptLogin(){
+    function attemptSignup(){
+
         console.log(userId);
         console.log(password);
 
         const client = new Client();
-        const loginPromise = client.login(userId, password);
+        const loginPromise = client.register(name,userId, password);
         loginPromise
         .then((res) => {         
             console.log(res);
-            console.log("Navigating to questionsfeed");
-            client.setupAuthHeader(userId, password);
+            console.log("Navigating to login page");
+            //client.setupAuthHeader(userId, password);
 
             //save credentials to localStorage
             storeCredential()
@@ -68,8 +81,8 @@ export default function Login(){
             setuserId("")
             setPassword("")
 
-            //succesful login will route to questions page
-            navigate("/questions");
+            //succesful register will route to login page
+            navigate("/login");
         })
         .catch((err) => console.log(`Failed! ${err}`));
     }

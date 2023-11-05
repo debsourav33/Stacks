@@ -3,6 +3,7 @@ import axios from "axios"
 export default class Client{
     static questionUrl = "http://localhost:8080/questions";
     static loginUrl = "http://localhost:8083/login";
+    static registerUrl = "http://localhost:8083/register";
     static answersUrl = "http://localhost:8082/answers";
     static dummyUserName = "heaps";
     static dummyPassword = "go123";
@@ -80,6 +81,20 @@ export default class Client{
         let url = Client.loginUrl;
         console.log(`Hitting: ${url}`);
         return axios.post(url,userObject);
+    }
+
+    register(name, userId, password){
+        const payload = {
+            name,
+            credential : {
+                userId,
+                password
+            }
+        };
+
+        let url = Client.registerUrl;
+        console.log(`Hitting: ${url}`);
+        return axios.post(url,payload);
     }
 
     
